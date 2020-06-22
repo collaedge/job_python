@@ -53,7 +53,7 @@ setup(
     data_files=data_files,
     entry_points={
         'console_scripts': [
-            # 'xo = sawtooth_xo.xo_cli:main_wrapper',
-            'xo-tp-python = sawtooth_job.processor.main:main',
+            # 'job = sawtooth_job.job_cli:main_wrapper',
+            'job-tp-python = sawtooth_job.processor.main:main',
         ]
     })
