@@ -3,3 +3,4 @@
 .vscode
 .dist
 .sawtooth_job.egg-info
+.build
