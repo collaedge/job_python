@@ -36,8 +36,8 @@ if os.path.exists("/lib/systemd/system"):
 
 setup(
     name='sawtooth-job',
-    version=subprocess.check_output(
-        ['../../bin/get_version']).decode('utf-8').strip(),
+    # version=subprocess.check_output(
+    #     ['../../bin/get_version']).decode('utf-8').strip(),
     description='Sawtooth JOB Example',
     author='Hyperledger Sawtooth',
     url='https://github.com/hyperledger/sawtooth-sdk-python',

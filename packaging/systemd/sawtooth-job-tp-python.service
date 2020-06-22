@@ -21,7 +21,7 @@ After=network.target
 User=sawtooth
 Group=sawtooth
 EnvironmentFile=-/etc/default/sawtooth-job-tp-python
-ExecStart=/usr/bin/job-tp-python $SAWTOOTH_XO_TP_PYTHON_ARGS
+ExecStart=/usr/bin/job-tp-python $SAWTOOTH_JOB_TP_PYTHON_ARGS
 Restart=on-failure
 
 [Install]
