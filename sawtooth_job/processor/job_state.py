@@ -12,6 +12,7 @@
 # -----------------------------------------------------------------------------
 
 import hashlib
+import cbor
 
 from sawtooth_sdk.processor.exceptions import InternalError
 
@@ -25,7 +26,7 @@ def _make_job_address(name):
 
 
 class Job:
-    def __init__(self, workerId, workerId, working_time, deadline, base_rewards, extra_rewards):
+    def __init__(self, jobId, workerId, working_time, deadline, base_rewards, extra_rewards):
         self.jobId = jobId
         self.workerId = workerId
         self.working_time = working_time
@@ -45,58 +46,39 @@ class JobState:
             context (sawtooth_sdk.processor.context.Context): Access to
                 validator state from within the transaction processor.
         """
-
         self._context = context
         self._address_cache = {}
 
-    def delete_game(self, game_name):
-        """Delete the Game named game_name from state.
+    def set_job(self, jobId, job):
+        """Store the job in the validator state.
 
         Args:
-            game_name (str): The name.
-
-        Raises:
-            KeyError: The Game with game_name does not exist.
+            jobId (str): The id.
+            job (Job): The information specifying the current job.
         """
 
-        games = self._load_games(game_name=game_name)
+        jobs = self._load_jobs(jobId=jobId)
 
-        del games[game_name]
-        if games:
-            self._store_game(game_name, games=games)
-        else:
-            self._delete_game(game_name)
+        jobs[jobId] = job
 
-    def set_game(self, game_name, game):
-        """Store the game in the validator state.
+        self._store_job(jobId, jobs=jobs)
+
+    def get_job(self, jobId):
+        """Get the job associated with jobId.
 
         Args:
-            game_name (str): The name.
-            game (Game): The information specifying the current game.
-        """
-
-        games = self._load_games(game_name=game_name)
-
-        games[game_name] = game
-
-        self._store_game(game_name, games=games)
-
-    def get_game(self, game_name):
-        """Get the game associated with game_name.
-
-        Args:
-            game_name (str): The name.
+            jobId (str): The ids.
 
         Returns:
-            (Game): All the information specifying a game.
+            (Job): All the information specifying a job.
         """
 
-        return self._load_games(game_name=game_name).get(game_name)
+        return self._load_jobs(jobId=jobId).get(jobId)
 
-    def _store_game(self, game_name, games):
-        address = _make_xo_address(game_name)
+    def _store_job(self, jobId, jobs):
+        address = _make_job_address(jobId)
 
-        state_data = self._serialize(games)
+        state_data = cbor.dumps(jobs)
 
         self._address_cache[address] = state_data
 
@@ -104,24 +86,15 @@ class JobState:
             {address: state_data},
             timeout=self.TIMEOUT)
 
-    def _delete_game(self, game_name):
-        address = _make_xo_address(game_name)
-
-        self._context.delete_state(
-            [address],
-            timeout=self.TIMEOUT)
-
-        self._address_cache[address] = None
-
-    def _load_games(self, game_name):
-        address = _make_xo_address(game_name)
+    def _load_jobs(self, jobId):
+        address = _make_job_address(jobId)
 
         if address in self._address_cache:
             if self._address_cache[address]:
-                serialized_games = self._address_cache[address]
-                games = self._deserialize(serialized_games)
+                serialized_jobs = self._address_cache[address]
+                jobs = cbor.loads(serialized_jobs)
             else:
-                games = {}
+                jobs = {}
         else:
             state_entries = self._context.get_state(
                 [address],
@@ -130,50 +103,11 @@ class JobState:
 
                 self._address_cache[address] = state_entries[0].data
 
-                games = self._deserialize(data=state_entries[0].data)
+                jobs = cbor.loads(state_entries[0].data)
 
             else:
                 self._address_cache[address] = None
-                games = {}
+                jobs = {}
 
-        return games
+        return jobs
 
-    def _deserialize(self, data):
-        """Take bytes stored in state and deserialize them into Python
-        Game objects.
-
-        Args:
-            data (bytes): The UTF-8 encoded string stored in state.
-
-        Returns:
-            (dict): game name (str) keys, Game values.
-        """
-
-        games = {}
-        try:
-            for game in data.decode().split("|"):
-                name, board, state, player1, player2 = game.split(",")
-
-                games[name] = Game(name, board, state, player1, player2)
-        except ValueError:
-            raise InternalError("Failed to deserialize game data")
-
-        return games
-
-    def _serialize(self, games):
-        """Takes a dict of game objects and serializes them into bytes.
-
-        Args:
-            games (dict): game name (str) keys, Game values.
-
-        Returns:
-            (bytes): The UTF-8 encoded string stored in state.
-        """
-
-        game_strs = []
-        for name, g in games.items():
-            game_str = ",".join(
-                [name, g.board, g.state, g.player1, g.player2])
-            game_strs.append(game_str)
-
-        return "|".join(sorted(game_strs)).encode()

@@ -1,17 +1,7 @@
-# Copyright 2018 Intel Corporation
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# 
 # -----------------------------------------------------------------------------
+
+import cbor
 
 from sawtooth_sdk.processor.exceptions import InvalidTransaction
 
@@ -20,52 +10,107 @@ class JobPayload:
 
     def __init__(self, payload):
         try:
-            # The payload is csv utf-8 encoded string
-            name, action, space = payload.decode().split(",")
+            # load payload
+            content = cbor.loads(payload)
         except ValueError:
             raise InvalidTransaction("Invalid payload serialization")
 
-        if not name:
+        try:
+            jobId = content['jobId']
+        except AttributeError:
+            raise InvalidTransaction('jobId is required')
+
+        try:
+            wokerId = content['wokerId']
+        except AttributeError:
             raise InvalidTransaction('Name is required')
 
-        if '|' in name:
-            raise InvalidTransaction('Name cannot contain "|"')
+        try:
+            publisherId = content['publisherId']
+        except AttributeError:
+            raise InvalidTransaction('publisherId is required')
 
-        if not action:
-            raise InvalidTransaction('Action is required')
+        try:
+            start_time = content['start_time']
+        except AttributeError:
+            raise InvalidTransaction('start_time is required')
 
-        if action not in ('create', 'take', 'delete'):
+        try:
+            end_time = content['end_time']
+        except AttributeError:
+            raise InvalidTransaction('publisherId is required')
+
+        # try:
+        #     deadline = content['deadline']
+        # except AttributeError:
+        #     raise InvalidTransaction('deadline is required')
+
+        try:
+            base_rewaords = content['base_rewaords']
+        except AttributeError:
+            raise InvalidTransaction('base_rewaords is required')
+        
+        try:
+            extra_rewards = content['extra_rewards']
+        except AttributeError:
+            raise InvalidTransaction('extra_rewards is required')
+        
+        try:
+            action = content['action']
+        except AttributeError:
+            raise InvalidTransaction('action is required')
+
+        if action not in ('create', 'ggetByIdet', 'getByWorker'):
             raise InvalidTransaction('Invalid action: {}'.format(action))
 
-        if action == 'take':
-            try:
-
-                if int(space) not in range(1, 10):
-                    raise InvalidTransaction(
-                        "Space must be an integer from 1 to 9")
-            except ValueError:
-                raise InvalidTransaction(
-                    'Space must be an integer from 1 to 9')
-
-        if action == 'take':
-            space = int(space)
-
-        self._name = name
+        self._jobId = jobId
+        self._wokerId = wokerId
+        self._publisherId = publisherId
+        self._start_time = start_time
+        self._end_time = end_time
+        # self._deadline = deadline
+        self._base_rewaords = base_rewaords
+        self._extra_rewards = extra_rewards
         self._action = action
-        self._space = space
 
     @staticmethod
-    def from_bytes(payload):
-        return XoPayload(payload=payload)
+    def load_job(payload):
+        return JobPayload(payload=payload)
 
     @property
-    def name(self):
-        return self._name
+    def jobId(self):
+        return self._jobId
+
+    @property
+    def wokerId(self):
+        return self._wokerId
+
+    @property
+    def publisherId(self):
+        return self._publisherId
+
+    @property
+    def end_time(self):
+        return self._end_time
+    
+    @property
+    def start_time(self):
+        return self._start_time
+
+    # @property
+    # def deadline(self):
+    #     return self._deadline
+
+    @property
+    def base_rewaords(self):
+        return self._base_rewaords
+
+    @property
+    def extra_rewards(self):
+        return self._extra_rewards
 
     @property
     def action(self):
         return self._action
 
-    @property
-    def space(self):
-        return self._space
+    
