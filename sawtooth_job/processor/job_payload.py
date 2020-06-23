@@ -41,10 +41,10 @@ class JobPayload:
         except AttributeError:
             raise InvalidTransaction('publisherId is required')
 
-        # try:
-        #     deadline = content['deadline']
-        # except AttributeError:
-        #     raise InvalidTransaction('deadline is required')
+        try:
+            deadline = content['deadline']
+        except AttributeError:
+            raise InvalidTransaction('deadline is required')
 
         try:
             base_rewaords = content['base_rewards']
@@ -69,7 +69,7 @@ class JobPayload:
         self._publisherId = publisherId
         self._start_time = start_time
         self._end_time = end_time
-        # self._deadline = deadline
+        self._deadline = deadline
         self.base_rewards = base_rewards
         self._extra_rewards = extra_rewards
         self._action = action
@@ -98,9 +98,9 @@ class JobPayload:
     def start_time(self):
         return self._start_time
 
-    # @property
-    # def deadline(self):
-    #     return self._deadline
+    @property
+    def deadline(self):
+        return self._deadline
 
     @property
     def base_rewaords(self):
