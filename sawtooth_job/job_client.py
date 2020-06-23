@@ -80,6 +80,7 @@ class JobClient:
             publisherId,
             start_time,
             end_time,
+            deadline,
             base_rewards,
             extra_rewards,
             "create",
@@ -182,6 +183,7 @@ class JobClient:
                     publisherId,
                     start_time,
                     end_time,
+                    deadline,
                     base_rewards,
                     extra_rewards,
                     action,
@@ -193,6 +195,7 @@ class JobClient:
             'publisherId': publisherId,
             'start_time': start_time,
             'end_time': end_time,
+            'deadline': deadline,
             'base_rewards': base_rewards,
             "extra_rewards": extra_rewards,
             "action": action
