@@ -46,9 +46,9 @@ class JobPayload:
         #     raise InvalidTransaction('deadline is required')
 
         try:
-            base_rewaords = content['base_rewaords']
+            base_rewaords = content['base_rewards']
         except AttributeError:
-            raise InvalidTransaction('base_rewaords is required')
+            raise InvalidTransaction('base_rewards is required')
         
         try:
             extra_rewards = content['extra_rewards']
