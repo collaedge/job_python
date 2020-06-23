@@ -53,7 +53,7 @@ setup(
     data_files=data_files,
     entry_points={
         'console_scripts': [
-            # 'job = sawtooth_job.job_cli:main_wrapper',
+            'job = sawtooth_job.job_cli:main_wrapper',
             'job-tp-python = sawtooth_job.processor.main:main',
         ]
     })

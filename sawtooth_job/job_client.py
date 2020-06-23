@@ -35,13 +35,13 @@ from sawtooth_sdk.protobuf.batch_pb2 import BatchList
 from sawtooth_sdk.protobuf.batch_pb2 import BatchHeader
 from sawtooth_sdk.protobuf.batch_pb2 import Batch
 
-from sawtooth_xo.xo_exceptions import XoException
+from sawtooth_job.job_exceptions import JobException
 
 
 def _sha512(data):
     return hashlib.sha512(data).hexdigest()
 
-class JoBClient:
+class JobClient:
     # constant
     P = 0.8
 
@@ -57,14 +57,14 @@ class JoBClient:
             with open(keyfile) as fd:
                 private_key_str = fd.read().strip()
         except OSError as err:
-            raise XoException(
+            raise JobException(
                 'Failed to read private key {}: {}'.format(
                     keyfile, str(err)))
 
         try:
             private_key = Secp256k1PrivateKey.from_hex(private_key_str)
         except ParseError as e:
-            raise XoException(
+            raise JobException(
                 'Unable to load private key: {}'.format(str(e)))
 
         self._signer = CryptoFactory(create_context('secp256k1')) \
@@ -85,14 +85,11 @@ class JoBClient:
             wait=wait,
             )
 
-    # def take(self, name, space, wait=None, auth_user=None, auth_password=None):
-    #     return self._send_xo_txn(
-    #         name,
-    #         "take",
-    #         space,
-    #         wait=wait,
-    #         auth_user=auth_user,
-    #         auth_password=auth_password)
+    def getJob(self, jobId, space, wait=None):
+        return self._send_transaction(
+            jobId=jobId,
+            action="get",
+            wait=wait)
 
     def list(self):
         prefix = self._get_prefix()
@@ -131,7 +128,7 @@ class JoBClient:
                 )
             return yaml.safe_load(result)['data'][0]['status']
         except BaseException as err:
-            raise XoException(err)
+            raise JobException(err)
 
     def _get_prefix(self):
         return _sha512('job'.encode('utf-8'))[0:6]
@@ -163,18 +160,18 @@ class JoBClient:
                 result = requests.get(url, headers=headers)
 
             if result.status_code == 404:
-                raise XoException("No such job: {}".format(jobId))
+                raise JobException("No such job: {}".format(jobId))
 
             if not result.ok:
-                raise XoException("Error {}: {}".format(
+                raise JobException("Error {}: {}".format(
                     result.status_code, result.reason))
 
         except requests.ConnectionError as err:
-            raise XoException(
+            raise JobException(
                 'Failed to connect to {}: {}'.format(url, str(err)))
 
         except BaseException as err:
-            raise XoException(err)
+            raise JobException(err)
 
         return result.text
 
