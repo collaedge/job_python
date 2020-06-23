@@ -69,7 +69,7 @@ class JobPayload:
         self._start_time = start_time
         self._end_time = end_time
         # self._deadline = deadline
-        self._base_rewaords = base_rewaords
+        self.base_rewards = base_rewards
         self._extra_rewards = extra_rewards
         self._action = action
 

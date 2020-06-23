@@ -194,7 +194,8 @@ class JobClient:
             'start_time': start_time,
             'end_time': end_time,
             'base_rewards': base_rewards,
-            "extra_rewards": extra_rewards
+            "extra_rewards": extra_rewards,
+            "action": action
         })
 
         # Construct the address
