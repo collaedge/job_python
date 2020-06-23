@@ -293,7 +293,12 @@ def do_show(args):
 
 
 def do_create(args):
-    name = args.name
+    wokerId = args.wokerId
+    publisherId = args.publisherId
+    start_time = args.start_time
+    end_time = args.end_time
+    deadline = args.deadline
+    base_rewards = args.base_rewards
 
     url = _get_url(args)
     keyfile = _get_keyfile(args)
@@ -303,11 +308,15 @@ def do_create(args):
 
     if args.wait and args.wait > 0:
         response = client.create(
-            name, wait=args.wait,
+            wokerId, publisherId,
+            start_time, end_time, deadline,
+            base_rewards, wait=args.wait,
             )
     else:
         response = client.create(
-            name)
+            wokerId, publisherId,
+            start_time, end_time, deadline,
+            base_rewards)
 
     print("Response: {}".format(response))
 
