@@ -88,22 +88,22 @@ def add_create_parser(subparsers, parent_parser):
 
     parser.add_argument(
         'start_time',
-        type=str,
+        type=float,
         help='job start time')
 
     parser.add_argument(
         'end_time',
-        type=str,
+        type=float,
         help='job finish time')
     
     parser.add_argument(
         'deadline',
-        type=str,
+        type=float,
         help='expected job finish time')
 
     parser.add_argument(
         'base_rewards',
-        type=str,
+        type=float,
         help='given base rewards')
 
     parser.add_argument(
@@ -293,8 +293,8 @@ def do_show(args):
 
 
 def do_create(args):
-    print('args: '.args)
-    wokerId = args.wokerId
+    print(args)
+    workerId = args.workerId
     publisherId = args.publisherId
     start_time = args.start_time
     end_time = args.end_time
@@ -309,13 +309,13 @@ def do_create(args):
 
     if args.wait and args.wait > 0:
         response = client.create(
-            wokerId, publisherId,
+            workerId, publisherId,
             start_time, end_time, deadline,
             base_rewards, wait=args.wait,
             )
     else:
         response = client.create(
-            wokerId, publisherId,
+            workerId, publisherId,
             start_time, end_time, deadline,
             base_rewards)
 

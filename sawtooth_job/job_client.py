@@ -41,9 +41,10 @@ from sawtooth_job.job_exceptions import JobException
 def _sha512(data):
     return hashlib.sha512(data).hexdigest()
 
+# constant
+P = 0.8
 class JobClient:
-    # constant
-    P = 0.8
+    
 
     def __init__(self, base_url, keyfile=None):
 
@@ -71,7 +72,7 @@ class JobClient:
             .new_signer(private_key)
 
     def create(self, wokerId, publisherId, start_time, end_time, deadline, base_rewards, wait=None):
-        jobId = uuid.uuid1()
+        jobId = str(uuid.uuid1())
         extra_rewards = ((P*(deadline - (end_time - start_time))) / deadline)*base_rewards
         return self._send_transaction(
             jobId,
