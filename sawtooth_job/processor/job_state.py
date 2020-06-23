@@ -58,9 +58,11 @@ class JobState:
         """
 
         jobs = self._load_jobs(jobId=jobId)
-
+        print('+++++++++++++++++++++++++++jobs before set:')
+        print(jobs)
         jobs[jobId] = job
-
+        print('+++++++++++++++++++++++++++jobs after set:')
+        print(jobs)
         self._store_job(jobId, jobs=jobs)
 
     def get_job(self, jobId):
@@ -77,9 +79,10 @@ class JobState:
 
     def _store_job(self, jobId, jobs):
         address = _make_job_address(jobId)
-
+        print('+++++++++++++++++++++++++++jobs address:')
+        print(address)
         state_data = cbor.dumps(jobs)
-
+        print('state data' + state_data)
         self._address_cache[address] = state_data
 
         self._context.set_state(

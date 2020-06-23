@@ -46,14 +46,16 @@ class JobTransactionHandler(TransactionHandler):
 
         # create a transaction 
         if job_payload.action == 'create':
-
+            print('+++++++++++++++++creating job +++++++++++++++++++++++')
             job = Job(jobId=job_payload.jobId,
                         workerId=job_payload.workerId,
                         working_time=job_payload.end_time - job_payload.start_time,
                         deadline=job_payload.deadline,
                         base_rewards=job_payload.base_rewards,
                         extra_rewards=job_payload.extra_rewards)
-
+            print('+++++++++++++++++hanlder: job +++++++++++++++++++')
+            print('job id: ' + job_payload.jobId)
+            print(job)
             job_state.set_job(job_payload.jobId, job)
             _display("{} created a job: {}.".format(signer[:6], job_payload.jobId))
 
