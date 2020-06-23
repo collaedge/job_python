@@ -49,7 +49,7 @@ class JobTransactionHandler(TransactionHandler):
             print('+++++++++++++++++creating job +++++++++++++++++++++++')
             job = Job(jobId=job_payload.jobId,
                         workerId=job_payload.workerId,
-                        working_time=job_payload.end_time - job_payload.start_time,
+                        working_time=str(float(job_payload.end_time) - float(job_payload.start_time)),
                         deadline=job_payload.deadline,
                         base_rewards=job_payload.base_rewards,
                         extra_rewards=job_payload.extra_rewards)

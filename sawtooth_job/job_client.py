@@ -73,7 +73,7 @@ class JobClient:
 
     def create(self, workerId, publisherId, start_time, end_time, deadline, base_rewards, wait=None):
         jobId = str(uuid.uuid1())
-        extra_rewards = ((P*(deadline - (end_time - start_time))) / deadline)*base_rewards
+        extra_rewards = ((P*(float(deadline) - (float(end_time) - float(start_time)))) / float(deadline))*float(base_rewards)
         return self._send_transaction(
             jobId,
             workerId,
@@ -82,7 +82,7 @@ class JobClient:
             end_time,
             deadline,
             base_rewards,
-            extra_rewards,
+            str(extra_rewards),
             "create",
             wait=wait,
             )
