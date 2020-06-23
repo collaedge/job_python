@@ -22,7 +22,7 @@ class JobPayload:
             raise InvalidTransaction('jobId is required')
 
         try:
-            wokerId = content['wokerId']
+            workerId = content['workerId']
         except AttributeError:
             raise InvalidTransaction('Name is required')
 
@@ -65,7 +65,7 @@ class JobPayload:
             raise InvalidTransaction('Invalid action: {}'.format(action))
 
         self._jobId = jobId
-        self._wokerId = wokerId
+        self.workerId = workerId
         self._publisherId = publisherId
         self._start_time = start_time
         self._end_time = end_time
@@ -83,8 +83,8 @@ class JobPayload:
         return self._jobId
 
     @property
-    def wokerId(self):
-        return self._wokerId
+    def workerId(self):
+        return self.workerId
 
     @property
     def publisherId(self):

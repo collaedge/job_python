@@ -71,12 +71,12 @@ class JobClient:
         self._signer = CryptoFactory(create_context('secp256k1')) \
             .new_signer(private_key)
 
-    def create(self, wokerId, publisherId, start_time, end_time, deadline, base_rewards, wait=None):
+    def create(self, workerId, publisherId, start_time, end_time, deadline, base_rewards, wait=None):
         jobId = str(uuid.uuid1())
         extra_rewards = ((P*(deadline - (end_time - start_time))) / deadline)*base_rewards
         return self._send_transaction(
             jobId,
-            wokerId,
+            workerId,
             publisherId,
             start_time,
             end_time,
@@ -178,7 +178,7 @@ class JobClient:
 
     def _send_transaction(self,
                     jobId,
-                    wokerId,
+                    workerId,
                     publisherId,
                     start_time,
                     end_time,
@@ -189,7 +189,7 @@ class JobClient:
         # Serialization is just a delimited utf-8 encoded string
         payload = cbor.dumps({
             'jobId': jobId,
-            'wokerId': wokerId,
+            'workerId': workerId,
             'publisherId': publisherId,
             'start_time': start_time,
             'end_time': end_time,
@@ -197,6 +197,8 @@ class JobClient:
             "extra_rewards": extra_rewards,
             "action": action
         })
+
+        print(payload)
 
         # Construct the address
         address = self._get_address(jobId)

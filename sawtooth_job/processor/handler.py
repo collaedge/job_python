@@ -51,7 +51,7 @@ class JobTransactionHandler(TransactionHandler):
                         workerId=job_payload.workerId,
                         working_time=job_payload.end_time - job_payload.start_time,
                         deadline=job_payload.deadline,
-                        base_rewards=job_payload.base_rewaords,
+                        base_rewards=job_payload.base_rewards,
                         extra_rewards=job_payload.extra_rewards)
 
             job_state.set_job(job_payload.jobId, job)
