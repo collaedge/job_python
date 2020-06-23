@@ -12,7 +12,6 @@
 # -----------------------------------------------------------------------------
 
 import hashlib
-import cbor
 
 from sawtooth_sdk.processor.exceptions import InternalError
 
@@ -81,7 +80,7 @@ class JobState:
         address = _make_job_address(jobId)
         print('+++++++++++++++++++++++++++jobs address:')
         print(address)
-        state_data = cbor.dumps(jobs)
+        state_data = self._serialize(jobs)
         print('state data' + state_data)
         self._address_cache[address] = state_data
 
@@ -95,7 +94,7 @@ class JobState:
         if address in self._address_cache:
             if self._address_cache[address]:
                 serialized_jobs = self._address_cache[address]
-                jobs = cbor.loads(serialized_jobs)
+                jobs = self._deserialize(serialized_jobs)
             else:
                 jobs = {}
         else:
@@ -106,11 +105,51 @@ class JobState:
 
                 self._address_cache[address] = state_entries[0].data
 
-                jobs = cbor.loads(state_entries[0].data)
+                jobs = self._deserialize(state_entries[0].data)
 
             else:
                 self._address_cache[address] = None
                 jobs = {}
 
         return jobs
+
+    def _deserialize(self, data):
+        """Take bytes stored in state and deserialize them into Python
+        Game objects.
+
+        Args:
+            data (bytes): The UTF-8 encoded string stored in state.
+
+        Returns:
+            (dict): game name (str) keys, Game values.
+        """
+
+        jobs = {}
+        try:
+            for job in data.decode().split("|"):
+                jobId, workerId, working_time, deadline, base_rewards, extra_rewards = job.split(",")
+
+                jobs[jobId] = Job(jobId, workerId, working_time, deadline, base_rewards, extra_rewards)
+        except ValueError:
+            raise InternalError("Failed to deserialize game data")
+
+        return jobs
+
+    def _serialize(self, jobs):
+        """Takes a dict of game objects and serializes them into bytes.
+
+        Args:
+            games (dict): game name (str) keys, Game values.
+
+        Returns:
+            (bytes): The UTF-8 encoded string stored in state.
+        """
+
+        job_strs = []
+        for jobId, job in jobs.items():
+            job_str = ",".join(
+                [jobId, job.workerId, job.working_time, job.deadline, job.base_rewards, job.base_rewards, job.extra_rewards])
+            job_strs.append(job_str)
+
+        return "|".join(job_strs).encode()
 
