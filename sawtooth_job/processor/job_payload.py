@@ -47,7 +47,7 @@ class JobPayload:
             raise InvalidTransaction('deadline is required')
 
         try:
-            base_rewaords = content['base_rewards']
+            base_rewards = content['base_rewards']
         except AttributeError:
             raise InvalidTransaction('base_rewards is required')
         
@@ -65,12 +65,12 @@ class JobPayload:
             raise InvalidTransaction('Invalid action: {}'.format(action))
 
         self._jobId = jobId
-        self.workerId = workerId
+        self._workerId = workerId
         self._publisherId = publisherId
         self._start_time = start_time
         self._end_time = end_time
         self._deadline = deadline
-        self.base_rewards = base_rewards
+        self._base_rewards = base_rewards
         self._extra_rewards = extra_rewards
         self._action = action
 
@@ -84,27 +84,27 @@ class JobPayload:
 
     @property
     def workerId(self):
-        return self.workerId
+        return self._workerId
 
     @property
     def publisherId(self):
         return self._publisherId
 
     @property
-    def end_time(self):
-        return self._end_time
-    
-    @property
     def start_time(self):
         return self._start_time
 
+    @property
+    def end_time(self):
+        return self._end_time
+    
     @property
     def deadline(self):
         return self._deadline
 
     @property
-    def base_rewaords(self):
-        return self._base_rewaords
+    def base_rewards(self):
+        return self._base_rewards
 
     @property
     def extra_rewards(self):
