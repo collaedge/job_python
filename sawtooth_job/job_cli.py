@@ -88,22 +88,22 @@ def add_create_parser(subparsers, parent_parser):
 
     parser.add_argument(
         'start_time',
-        type=str,
+        type=float,
         help='job start time')
 
     parser.add_argument(
         'end_time',
-        type=str,
+        type=float,
         help='job finish time')
     
     parser.add_argument(
         'deadline',
-        type=str,
+        type=float,
         help='expected job finish time')
 
     parser.add_argument(
         'base_rewards',
-        type=str,
+        type=float,
         help='given base rewards')
 
     parser.add_argument(

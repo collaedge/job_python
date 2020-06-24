@@ -22,7 +22,6 @@ import time
 import random
 import requests
 import yaml
-import cbor
 
 from sawtooth_signing import create_context
 from sawtooth_signing import CryptoFactory
@@ -73,15 +72,15 @@ class JobClient:
 
     def create(self, workerId, publisherId, start_time, end_time, deadline, base_rewards, wait=None):
         jobId = str(uuid.uuid1())
-        extra_rewards = ((P*(float(deadline) - (float(end_time) - float(start_time)))) / float(deadline))*float(base_rewards)
+        extra_rewards = (P*(deadline - (end_time - (start_time))) / deadline)*base_rewards
         return self._send_transaction(
             jobId,
             workerId,
             publisherId,
-            start_time,
-            end_time,
-            deadline,
-            base_rewards,
+            str(start_time),
+            str(end_time),
+            str(deadline),
+            str(base_rewards),
             str(extra_rewards),
             "create",
             wait=wait,
@@ -189,17 +188,8 @@ class JobClient:
                     action,
                     wait=None):
         # Serialization is just a delimited utf-8 encoded string
-        payload = cbor.dumps({
-            'jobId': jobId,
-            'workerId': workerId,
-            'publisherId': publisherId,
-            'start_time': start_time,
-            'end_time': end_time,
-            'deadline': deadline,
-            'base_rewards': base_rewards,
-            "extra_rewards": extra_rewards,
-            "action": action
-        })
+        payload = ",".join([jobId, workerId, publisherId, publisherId, start_time, end_time,
+                            deadline, base_rewards, extra_rewards, action]).encode()
 
         print('client payload: ')
         print(payload)
