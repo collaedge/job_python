@@ -201,7 +201,8 @@ class JobClient:
             "action": action
         })
 
-        print('client payload: '+payload)
+        print('client payload: ')
+        print(payload)
 
         # Construct the address
         address = self._get_address(jobId)
