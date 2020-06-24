@@ -58,8 +58,7 @@ class JobClient:
                 private_key_str = fd.read().strip()
         except OSError as err:
             raise JobException(
-                'Failed to read private key {}: {}'.format(
-                    keyfile, str(err)))
+                'Failed to read private key {}: {}'.format(keyfile, str(err)))
 
         try:
             private_key = Secp256k1PrivateKey.from_hex(private_key_str)
@@ -71,8 +70,8 @@ class JobClient:
             .new_signer(private_key)
 
     def create(self, workerId, publisherId, start_time, end_time, deadline, base_rewards, wait=None):
-        jobId = str(uuid.uuid1())
-        extra_rewards = (P*(deadline - (end_time - (start_time))) / deadline)*base_rewards
+        jobId = str(uuid.uuid4())
+        extra_rewards = round((P*(deadline - (end_time - (start_time))) / deadline)*base_rewards, 1)
         return self._send_transaction(
             jobId,
             workerId,
