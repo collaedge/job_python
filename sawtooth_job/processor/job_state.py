@@ -129,9 +129,9 @@ class JobState:
         jobs = {}
         try:
             for job in data.decode().split("|"):
-                jobId, workerId, publisherId, working_time, deadline, base_rewards, extra_rewards = job.split(",")
+                jobId, workerId, publisherId, start_time, end_time, deadline, base_rewards, extra_rewards = job.split(",")
 
-                jobs[jobId] = Job(jobId, workerId, working_time, deadline, base_rewards, extra_rewards)
+                jobs[jobId] = Job(jobId, workerId, start_time, end_time, deadline, base_rewards, extra_rewards)
         except ValueError:
             raise InternalError("Failed to deserialize game data")
 
