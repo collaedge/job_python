@@ -80,7 +80,8 @@ class JobState:
         address = _make_job_address(jobId)
         print('+++++++++++++++++++++++++++jobs address: ' + address)
         state_data = self._serialize(jobs)
-        print('state data' + state_data)
+        print('state data')
+        print(state_data)
         self._address_cache[address] = state_data
 
         self._context.set_state(
