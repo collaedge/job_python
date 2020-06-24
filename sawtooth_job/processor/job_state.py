@@ -129,7 +129,7 @@ class JobState:
         jobs = {}
         try:
             for job in data.decode().split("|"):
-                jobId, workerId, working_time, deadline, base_rewards, extra_rewards = job.split(",")
+                jobId, workerId, publisherId, working_time, deadline, base_rewards, extra_rewards = job.split(",")
 
                 jobs[jobId] = Job(jobId, workerId, working_time, deadline, base_rewards, extra_rewards)
         except ValueError:
@@ -150,7 +150,7 @@ class JobState:
         job_strs = []
         for jobId, job in jobs.items():
             job_str = ",".join(
-                [jobId, job.workerId, job.start_time, job.end_time, job.deadline, job.base_rewards, job.extra_rewards])
+                [jobId, job.workerId, job.publisherId, job.start_time, job.end_time, job.deadline, job.base_rewards, job.extra_rewards])
             job_strs.append(job_str)
             print('++++++++++++job_strs: ')
             print(job_strs)
