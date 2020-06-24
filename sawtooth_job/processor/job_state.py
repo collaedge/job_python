@@ -25,9 +25,10 @@ def _make_job_address(jobId):
 
 
 class Job:
-    def __init__(self, jobId, workerId, start_time, end_time, deadline, base_rewards, extra_rewards):
+    def __init__(self, jobId, workerId, publisherId, start_time, end_time, deadline, base_rewards, extra_rewards):
         self.jobId = jobId
         self.workerId = workerId
+        self.publisherId = publisherId
         self.start_time = start_time
         self.end_time = end_time
         self.deadline = deadline

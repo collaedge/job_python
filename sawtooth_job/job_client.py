@@ -188,7 +188,7 @@ class JobClient:
                     action,
                     wait=None):
         # Serialization is just a delimited utf-8 encoded string
-        payload = ",".join([jobId, workerId, publisherId, publisherId, start_time, end_time,
+        payload = ",".join([jobId, workerId, publisherId, start_time, end_time,
                             deadline, base_rewards, extra_rewards, action]).encode()
 
         print('client payload: ')

@@ -49,6 +49,7 @@ class JobTransactionHandler(TransactionHandler):
             print('+++++++++++++++++creating job +++++++++++++++++++++++')
             job = Job(jobId=job_payload.jobId,
                         workerId=job_payload.workerId,
+                        publisherId=job_payload.publisherId,
                         start_time=job_payload.start_time,
                         end_time=job_payload.end_time,
                         deadline=job_payload.deadline,
