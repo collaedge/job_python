@@ -13,7 +13,7 @@ class JobPayload:
         print(payload)
         try:
             # load payload
-            jobId, workerId, publisherId, publisherId, start_time, end_time, deadline, base_rewards, extra_rewards, action = payload.decode().split(",")
+            jobId, workerId, publisherId, start_time, end_time, deadline, base_rewards, extra_rewards, action = payload.decode().split(",")
         except ValueError:
             raise InvalidTransaction("Invalid payload serialization")
         if not jobId:
