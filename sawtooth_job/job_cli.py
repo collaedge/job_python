@@ -257,11 +257,19 @@ def do_list(args):
     # auth_user, auth_password = _get_auth_info(args)
 
     client = JobClient(base_url=url, keyfile=None)
-
-    job_list = client.list()
-    for job in job_list:
-        for v in job.items():
-            print('jobs'.v)
+    
+    job_list = [
+        job.split(',')
+        for jobs in client.list()
+        for job in jobs.decode().split('|')
+    ]
+    
+    if job_list is not None:
+        for job_data in job_list:
+            jobId, workerId, publisherId, start_time, end_time, deadline, base_rewards, extra_rewards = job_data
+            print('{}, {}, {}, {}, {}, {}, {}, {}'.format(jobId, workerId, publisherId, start_time, end_time, deadline, base_rewards, extra_rewards))
+    else:
+        raise JobException("Could not retrieve game listing.")
     
 
     # if game_list is not None:

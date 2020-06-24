@@ -25,10 +25,11 @@ def _make_job_address(jobId):
 
 
 class Job:
-    def __init__(self, jobId, workerId, working_time, deadline, base_rewards, extra_rewards):
+    def __init__(self, jobId, workerId, start_time, end_time, deadline, base_rewards, extra_rewards):
         self.jobId = jobId
         self.workerId = workerId
-        self.working_time = working_time
+        self.start_time = start_time
+        self.end_time = end_time
         self.deadline = deadline
         self.base_rewards = base_rewards
         self.extra_rewards = extra_rewards
@@ -148,7 +149,7 @@ class JobState:
         job_strs = []
         for jobId, job in jobs.items():
             job_str = ",".join(
-                [jobId, job.workerId, job.working_time, job.deadline, job.base_rewards, job.base_rewards, job.extra_rewards])
+                [jobId, job.workerId, job.start_time, job.end_time, job.deadline, job.base_rewards, job.extra_rewards])
             job_strs.append(job_str)
             print('++++++++++++job_strs: ')
             print(job_strs)
