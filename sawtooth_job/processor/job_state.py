@@ -19,9 +19,9 @@ from sawtooth_sdk.processor.exceptions import InternalError
 JOB_NAMESPACE = hashlib.sha512('job'.encode("utf-8")).hexdigest()[0:6]
 
 
-def _make_job_address(name):
+def _make_job_address(jobId):
     return JOB_NAMESPACE + \
-        hashlib.sha512(name.encode('utf-8')).hexdigest()[:64]
+        hashlib.sha512(jobId.encode('utf-8')).hexdigest()[:64]
 
 
 class Job:
@@ -57,11 +57,9 @@ class JobState:
         """
 
         jobs = self._load_jobs(jobId=jobId)
-        print('+++++++++++++++++++++++++++jobs before set:')
-        print(jobs)
+        print('+++++++++++++++++++++++++++jobs before set: ' + jobs)
         jobs[jobId] = job
-        print('+++++++++++++++++++++++++++jobs after set:')
-        print(jobs)
+        print('+++++++++++++++++++++++++++jobs after set: ' + jobs)
         self._store_job(jobId, jobs=jobs)
 
     def get_job(self, jobId):
@@ -78,8 +76,7 @@ class JobState:
 
     def _store_job(self, jobId, jobs):
         address = _make_job_address(jobId)
-        print('+++++++++++++++++++++++++++jobs address:')
-        print(address)
+        print('+++++++++++++++++++++++++++jobs address: ' + address)
         state_data = self._serialize(jobs)
         print('state data' + state_data)
         self._address_cache[address] = state_data
@@ -144,12 +141,22 @@ class JobState:
         Returns:
             (bytes): The UTF-8 encoded string stored in state.
         """
-
+        print('++++++++++++serialize job++++++++++++++')
         job_strs = []
         for jobId, job in jobs.items():
             job_str = ",".join(
                 [jobId, job.workerId, job.working_time, job.deadline, job.base_rewards, job.base_rewards, job.extra_rewards])
             job_strs.append(job_str)
+            print('++++++++++++job_strs: ' + job_strs)
 
         return "|".join(job_strs).encode()
+
+        # jobs_obj = {}
+        # for jobId, job in jobs.items():
+        #     jobs_obj[jobId] = job
+        # return cbor.dumps(jobs_obj)
+
+
+        # content = cbor.loads(data)
+        # job = content[jobId]
 
