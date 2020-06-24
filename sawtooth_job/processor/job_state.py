@@ -55,11 +55,13 @@ class JobState:
             jobId (str): The id.
             job (Job): The information specifying the current job.
         """
-
+        print('++++++++++++++set job++++++++++++++')
         jobs = self._load_jobs(jobId=jobId)
-        print('+++++++++++++++++++++++++++jobs before set: ' + jobs)
+        print('+++++++++++++++++++++++++++jobs before set: ')
+        print(jobs)
         jobs[jobId] = job
-        print('+++++++++++++++++++++++++++jobs after set: ' + jobs)
+        print('+++++++++++++++++++++++++++jobs after set: ')
+        print(jobs)
         self._store_job(jobId, jobs=jobs)
 
     def get_job(self, jobId):

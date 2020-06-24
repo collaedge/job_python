@@ -55,7 +55,6 @@ class JobTransactionHandler(TransactionHandler):
                         extra_rewards=job_payload.extra_rewards)
             print('+++++++++++++++++hanlder: job +++++++++++++++++++')
             print('job id: ' + job_payload.jobId)
-            print(job)
             job_state.set_job(job_payload.jobId, job)
             _display("{} created a job: {}.".format(signer[:6], job_payload.jobId))
 
