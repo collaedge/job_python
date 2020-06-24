@@ -9,7 +9,8 @@ from sawtooth_sdk.processor.exceptions import InvalidTransaction
 class JobPayload:
 
     def __init__(self, payload):
-        print('+++payload: ' + payload)
+        print('+++payload: ')
+        print(payload)
         try:
             # load payload
             content = cbor.loads(payload)
