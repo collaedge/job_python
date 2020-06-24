@@ -149,7 +149,8 @@ class JobState:
             job_str = ",".join(
                 [jobId, job.workerId, job.working_time, job.deadline, job.base_rewards, job.base_rewards, job.extra_rewards])
             job_strs.append(job_str)
-            print('++++++++++++job_strs: ' + job_strs)
+            print('++++++++++++job_strs: ')
+            print(job_strs)
 
         return "|".join(job_strs).encode()
 
