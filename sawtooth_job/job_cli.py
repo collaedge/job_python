@@ -180,19 +180,19 @@ def add_workers_parser(subparsers, parent_parser):
         parents=[parent_parser])
 
     parser.add_argument(
-        'worker1',
+        '--worker1',
         type=str,
-        help='identifier for the game')
+        help='worker1 response, <workerId,start_time,end_time>')
 
     parser.add_argument(
-        'worker2',
+        '--worker2',
         type=str,
-        help='start job time')
+        help='worker2 response, <workerId,start_time,end_time>')
 
     parser.add_argument(
-        'worker3',
+        '--worker3',
         type=str,
-        help='finish job time')
+        help='worker3 response, <workerId,start_time,end_time>')
 
     parser.add_argument(
         '--url',

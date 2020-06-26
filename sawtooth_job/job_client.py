@@ -149,6 +149,9 @@ class JobClient:
                 })
         else:
             raise JobException("Could not retrieve game listing.")
+
+        print('++++++++job record in chain++++++++')
+        print(job_record)
         
         # time factor based reputation calculation
         # based on running history
@@ -189,8 +192,8 @@ class JobClient:
             if workerId in workerIds:
                 # store workers' job amount within 10 days
                 job_num_worker[workerId] = len(list(filter(lambda x: float(x['end_time']) > current_time-10*24*60*60, records)))
-                # workers' start time of the first
-                worker_start[workerId] = sorted(records, key=lambda x: float(x['start_time']))[0]
+                # workers' start time of the first job
+                worker_start[workerId] = float(sorted(records, key=lambda x: float(x['start_time']))[0]['start_time'])
 
         print('++++ worker start time +++++')
         print(worker_start)
