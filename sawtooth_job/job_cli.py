@@ -171,18 +171,28 @@ def add_list_parser(subparsers, parent_parser):
         'is using Basic Auth')
 
 
-def add_show_parser(subparsers, parent_parser):
+def add_workers_parser(subparsers, parent_parser):
     parser = subparsers.add_parser(
-        'show',
+        'workers',
         help='Displays information about an xo game',
         description='Displays the xo game <name>, showing the players, '
         'the game state, and the board',
         parents=[parent_parser])
 
     parser.add_argument(
-        'name',
+        'worker1',
         type=str,
         help='identifier for the game')
+
+    parser.add_argument(
+        'worker2',
+        type=str,
+        help='start job time')
+
+    parser.add_argument(
+        'worker3',
+        type=str,
+        help='finish job time')
 
     parser.add_argument(
         '--url',
@@ -198,18 +208,6 @@ def add_show_parser(subparsers, parent_parser):
         '--key-dir',
         type=str,
         help="identify directory of user's private key file")
-
-    parser.add_argument(
-        '--auth-user',
-        type=str,
-        help='specify username for authentication if REST API '
-        'is using Basic Auth')
-
-    parser.add_argument(
-        '--auth-password',
-        type=str,
-        help='specify password for authentication if REST API '
-        'is using Basic Auth')
 
 
 def create_parent_parser(prog_name):
@@ -247,7 +245,7 @@ def create_parser(prog_name):
 
     add_create_parser(subparsers, parent_parser)
     add_list_parser(subparsers, parent_parser)
-    add_show_parser(subparsers, parent_parser)
+    add_workers_parser(subparsers, parent_parser)
 
     return parser
 
@@ -317,6 +315,22 @@ def do_create(args):
 
     print("Response: {}".format(response))
 
+def do_workers(args):
+    print('+++workers+++')
+    print(args)
+    # worker string format: workerId,start_time,end_time
+    worker1 = args.worker1
+    worker2 = args.worker2
+    worker3 = args.worker3
+
+    url = _get_url(args)
+    client = JobClient(base_url=url, keyfile=None)
+
+    response = client.chooseWorker(
+        worker1, worker2, worker3 
+    )
+
+    print("do workers response: {}".format(response))
 
 # def do_take(args):
 #     name = args.name
@@ -380,8 +394,8 @@ def main(prog_name=os.path.basename(sys.argv[0]), args=None):
         do_create(args)
     elif args.command == 'list':
         do_list(args)
-    elif args.command == 'show':
-        do_show(args)
+    elif args.command == 'workers':
+        do_workers(args)
     # elif args.command == 'take':
     #     do_take(args)
     else:
