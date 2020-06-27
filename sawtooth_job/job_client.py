@@ -78,7 +78,7 @@ class JobClient:
             extra_rewards = round((P*(deadline - (end_time - start_time)) / deadline)*base_rewards, 1)
         else:
             extra_rewards = 0
-            base_rewards = -0.5*base_rewards
+            base_rewards = 0.5*base_rewards
         return self._send_transaction(
             jobId,
             workerId,
@@ -180,7 +180,7 @@ class JobClient:
         job_num_all = 0
         for records in job_record.values():
             for record in records:
-                if float(record['end_time']) > current_time-10*24*60*60:
+                if float(record['end_time']) > current_time-10*24*60*60*1000:
                     job_num_all += 1
         print('++++ number of all jobs+++++')
         print(job_num_all)
@@ -191,7 +191,7 @@ class JobClient:
         for workerId, records in job_record.items():
             if workerId in workerIds:
                 # store workers' job amount within 10 days
-                job_num_worker[workerId] = len(list(filter(lambda x: float(x['end_time']) > current_time-10*24*60*60, records)))
+                job_num_worker[workerId] = len(list(filter(lambda x: float(x['end_time']) > current_time-10*24*60*60*1000, records)))
                 # workers' start time of the first job
                 worker_start[workerId] = float(sorted(records, key=lambda x: float(x['start_time']))[0]['start_time'])
 
@@ -234,7 +234,7 @@ class JobClient:
         for workerId, records in job_record.items():
             if workerId in workerIds:
                 for record in records:
-                    if float(record['end_time']) > current_time-10*24*60*60:
+                    if float(record['end_time']) > current_time-10*24*60*60*1000:
                         rewards_within_period.setdefault(workerId, []).append({
                             'end_time': record['end_time'],
                             'extra_rewards': float(record['extra_rewards'])
@@ -242,7 +242,7 @@ class JobClient:
                     else:
                         rewards_execeed_period.setdefault(workerId, []).append({
                             'end_time': record['end_time'],
-                            'extra_rewards': (float(record['extra_rewards'])*math.e**-((current_time-float(record['end_time']))/10*24*60*60))
+                            'extra_rewards': (float(record['extra_rewards'])*math.e**-((current_time-float(record['end_time']))/(10*24*60*60*1000)))
                         })
         print('+++++ rewards_within_period ++++')
         print(rewards_within_period)
