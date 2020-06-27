@@ -240,12 +240,12 @@ class JobClient:
                 for record in records:
                     if float(record['end_time']) > current_time-10*24*60*60*1000:
                         rewards_within_period.setdefault(workerId, []).append({
-                            'end_time': record['end_time'],
+                            'end_time': float(record['end_time']),
                             'extra_rewards': float(record['extra_rewards'])
                         }) 
                     else:
                         rewards_execeed_period.setdefault(workerId, []).append({
-                            'end_time': record['end_time'],
+                            'end_time': float(record['end_time']),
                             'extra_rewards': (float(record['extra_rewards'])*math.e**-((current_time-float(record['end_time']))/(10*24*60*60*1000)))
                         })
         print('+++++ rewards_within_period ++++')
