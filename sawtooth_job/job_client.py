@@ -254,8 +254,9 @@ class JobClient:
         print(rewards_execeed_period)
 
         combined_rewards = rewards_within_period.copy()
-        for workerId, v in rewards_execeed_period.items():
-            combined_rewards[workerId].append(v)
+        for workerId, records in rewards_execeed_period.items():
+            for record in records:
+                combined_rewards[workerId].append(record)
 
         print('+++++ combined_rewards ++++')
         print(combined_rewards)
