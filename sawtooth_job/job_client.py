@@ -99,17 +99,17 @@ class JobClient:
         # the time workers finish the job
         working_time = {}
         if worker1 is not None:
-            workerId, start_time, end_time = worker1.split(',')
+            workerId, publisherId, start_time, end_time, deadline = worker1.split(',')
             workers_id.append(workerId)
             working_time[workerId] = float(end_time) - float(start_time)
 
         if worker2 is not None:
-            workerId, start_time, end_time = worker2.split(',')
+            workerId, publisherId, start_time, end_time, deadline = worker2.split(',')
             workers_id.append(workerId)
             working_time[workerId] = float(end_time) - float(start_time)
 
         if worker3 is not None:
-            workerId, start_time, end_time = worker3.split(',')
+            workerId, publisherId, start_time, end_time, deadline = worker3.split(',')
             workers_id.append(workerId)
             working_time[workerId] = float(end_time) - float(start_time)
 
@@ -126,7 +126,9 @@ class JobClient:
 
 
     def computeReputation(self, workerIds):
-        current_time = time.time()
+        # current time in millisecond
+        # current_time = time.time()
+        current_time = 1593215682000
         # get all job from chain
         job_list = [
             job.split(',')
@@ -156,12 +158,14 @@ class JobClient:
         # time factor based reputation calculation
         # based on running history
         score_running_based = self.computeBasedOnRunningTime(current_time, workerIds, job_record)
-
+        print('++++++++ score_running_based n++++++++')
+        print(score_running_based)
 
         # rewards based reputation calculation
         # based on extra rewards, reflecting histroy performance
         score_rewards_based = self.computeBasedOnRewards(current_time, workerIds, job_record)
-        
+        print('++++++++ score_rewards_based n++++++++')
+        print(score_rewards_based)
         reputation_workers = {}
 
         for workerId in workerIds:

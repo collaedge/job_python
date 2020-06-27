@@ -182,17 +182,17 @@ def add_workers_parser(subparsers, parent_parser):
     parser.add_argument(
         '--worker1',
         type=str,
-        help='worker1 response, <workerId,start_time,end_time>')
+        help='worker1 response, <workerId,publisherId,start_time,end_time,deadline,base_rewards>')
 
     parser.add_argument(
         '--worker2',
         type=str,
-        help='worker2 response, <workerId,start_time,end_time>')
+        help='worker2 response, <workerId,publisherId,start_time,end_time,deadline,base_rewards>')
 
     parser.add_argument(
         '--worker3',
         type=str,
-        help='worker3 response, <workerId,start_time,end_time>')
+        help='worker3 response, <workerId,publisherId,start_time,end_time,deadline,base_rewards>')
 
     parser.add_argument(
         '--url',
