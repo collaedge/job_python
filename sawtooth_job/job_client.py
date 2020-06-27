@@ -203,7 +203,7 @@ class JobClient:
         print(worker_start)
         print('++++ worker number of jobs +++++')
         print(job_num_worker)
-        # compute score
+        # compute score based on history jobs and running time
         running_score = {}
         averge_job = {}
         running_time = {}
@@ -230,10 +230,11 @@ class JobClient:
         B = 0.7
         reward_score = {}
         # required:
-        # 1. extra rewards on each record of workers (within 10 days and execeed 10 days)
-        # 2. 
+        # extra rewards on each record of workers (within 10 days and execeed 10 days)
         
+        # (within period) extra rewards have full wetight
         rewards_within_period = {}
+        # (execeed period) extra rewards have exponential moving average
         rewards_execeed_period = {}
         for workerId, records in job_record.items():
             if workerId in workerIds:
@@ -260,7 +261,8 @@ class JobClient:
 
         print('+++++ combined_rewards ++++')
         print(combined_rewards)
-
+        
+        # sort by end time
         for workerId, records in combined_rewards.items():
             combined_rewards[workerId] = sorted(records, key=lambda x: x['end_time'], reverse=True)
         print('+++++ sorted combined_rewards ++++')
@@ -271,7 +273,6 @@ class JobClient:
             score = 0
             for record in records:
                 score = B*score + (1-B)*record['extra_rewards']
-
             reward_score[workerId] = score
 
         return reward_score
