@@ -59,8 +59,8 @@ class JobState:
         """
         print('++++++++++++++set job++++++++++++++')
         jobs = self._load_jobs(jobId=jobId)
-        print('+++++++++++++++++++++++++++jobs before set: ')
-        print(jobs)
+        # print('+++++++++++++++++++++++++++jobs before set: ')
+        # print(jobs)
         jobs[jobId] = job
         print('+++++++++++++++++++++++++++jobs after set: ')
         print(jobs)
@@ -80,10 +80,10 @@ class JobState:
 
     def _store_job(self, jobId, jobs):
         address = _make_job_address(jobId)
-        print('+++++++++++++++++++++++++++jobs address: ' + address)
+        # print('+++++++++++++++++++++++++++jobs address: ' + address)
         state_data = self._serialize(jobs)
-        print('state data')
-        print(state_data)
+        # print('state data')
+        # print(state_data)
         self._address_cache[address] = state_data
 
         self._context.set_state(
@@ -156,13 +156,3 @@ class JobState:
             print(job_strs)
 
         return "|".join(job_strs).encode()
-
-        # jobs_obj = {}
-        # for jobId, job in jobs.items():
-        #     jobs_obj[jobId] = job
-        # return cbor.dumps(jobs_obj)
-
-
-        # content = cbor.loads(data)
-        # job = content[jobId]
-

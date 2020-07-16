@@ -332,29 +332,6 @@ def do_workers(args):
 
     print("do workers response: {}".format(response))
 
-# def do_take(args):
-#     name = args.name
-#     space = args.space
-
-#     url = _get_url(args)
-#     keyfile = _get_keyfile(args)
-#     auth_user, auth_password = _get_auth_info(args)
-
-#     client = XoClient(base_url=url, keyfile=keyfile)
-
-#     if args.wait and args.wait > 0:
-#         response = client.take(
-#             name, space, wait=args.wait,
-#             auth_user=auth_user,
-#             auth_password=auth_password)
-#     else:
-#         response = client.take(
-#             name, space,
-#             auth_user=auth_user,
-#             auth_password=auth_password)
-
-#     print("Response: {}".format(response))
-
 
 def _get_url(args):
     return DEFAULT_URL if args.url is None else args.url
