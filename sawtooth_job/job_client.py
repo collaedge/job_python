@@ -168,7 +168,7 @@ class JobClient:
         print('++++ choose one combine +++++')
         print(combine)
 
-        s = sorted(combine.items(), key=lambda x: x[1],reversed = True)
+        s = sorted(combine.items(), key=lambda x: x[1],reverse = True)
 
         return s[0]
 
