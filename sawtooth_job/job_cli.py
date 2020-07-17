@@ -195,6 +195,11 @@ def add_workers_parser(subparsers, parent_parser):
         help='worker3 response, <workerId,publisherId,start_time,end_time,deadline,base_rewards>')
 
     parser.add_argument(
+        '--base',
+        type=str,
+        help='publisher provide base rewards')
+
+    parser.add_argument(
         '--url',
         type=str,
         help='specify URL of REST API')
@@ -322,6 +327,7 @@ def do_workers(args):
     worker1 = args.worker1
     worker2 = args.worker2
     worker3 = args.worker3
+    base = args.base
 
     url = _get_url(args)
     client = JobClient(base_url=url, keyfile=None)
@@ -330,11 +336,33 @@ def do_workers(args):
         worker1, worker2, worker3 
     )
 
-    print('++++ worker1 ++++')
-    print(worker1)
-
+    if worker1 is not None: 
+        workerId, publisherId, start_time, end_time, deadline = worker1.split(',')
+        if response[0] == workerId:
+            create_job(publisherId, workerId, publisherId, float(start_time), float(end_time), float(deadline), float(base))
+    if worker2 is not None:
+        workerId, publisherId, start_time, end_time, deadline = worker2.split(',')
+        if response[0] == workerId:
+            create_job(publisherId, workerId, publisherId, float(start_time), float(end_time), float(deadline), float(base))
+    if worker3 is not None:
+        workerId, publisherId, start_time, end_time, deadline = worker3.split(',')
+        if response[0] == workerId:
+            create_job(publisherId, workerId, publisherId, float(start_time), float(end_time), float(deadline), float(base))
+    
     print("do workers response: {}".format(response))
 
+
+def create_job(self, keyfile, workerId, publisherId, start_time, end_time, deadline, base_rewards):
+    keyfile = _get_keyfile(keyfile)
+    # auth_user, auth_password = _get_auth_info(args)
+
+    client = JobClient(base_url=DEFAULT_URL, keyfile=keyfile)
+    response = client.create(
+        workerId, publisherId,
+        start_time, end_time, deadline,
+        base_rewards)
+
+    print("create job Response: {}".format(response))
 
 def _get_url(args):
     return DEFAULT_URL if args.url is None else args.url

@@ -133,23 +133,21 @@ class JobClient:
             if w in delays:
                 worker_delays[w] = delays[w]
         
-        print('++++ worker_delays +++++')
-        print(worker_delays)
+        # print('++++ worker_delays +++++')
+        # print(worker_delays)
 
-        print('++++ working_time +++++')
-        print(working_time)
+        # print('++++ working_time +++++')
+        # print(working_time)
 
         normalized_working_time = self.normalization(working_time)
         normalized_delay = self.normalization(worker_delays)
         normalized_repus = self.normalization(repus)
-        print('++++ normalized_working_time +++++')
-        print(normalized_working_time)
-        print('++++ normalized_delay +++++')
-        print(normalized_delay)
-        print('++++ normalized_repus +++++')
-        print(normalized_repus)
-        # print('++++ sorted worker_delays +++++')
-        # print(normalization(worker_delays))
+        # print('++++ normalized_working_time +++++')
+        # print(normalized_working_time)
+        # print('++++ normalized_delay +++++')
+        # print(normalized_delay)
+        # print('++++ normalized_repus +++++')
+        # print(normalized_repus)
 
         # compute scores for workers, choose the best
         # call create function with parms
@@ -167,7 +165,6 @@ class JobClient:
             - delay_weight*delay[workerId]
         print('++++ choose one combine +++++')
         print(combine)
-
         s = sorted(combine.items(), key=lambda x: x[1],reverse = True)
 
         return s[0]
