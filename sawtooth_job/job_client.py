@@ -121,12 +121,38 @@ class JobClient:
         repus = self.computeReputation(workers_id)
         print('++++ reputation +++++')
         print(repus)
-        # emulate delay for workers
+        # emulate delay for workers, ms
+        delays = {
+            'server_a': 103,
+            'server_b': 136,
+            'server_c': 115,
+            'server_d': 124
+        }
+        worker_delays = {}
+        for w in workers_id:
+            if w in delays:
+                worker_delays[w] = delays[w]
         
+        print('++++ worker_delays +++++')
+        print(worker_delays)
+
+        print('++++ working_time +++++')
+        print(working_time)
+
+        self.normalization(working_time)
+        # print('++++ sorted worker_delays +++++')
+        # print(normalization(worker_delays))
 
         # compute scores for workers, choose the best
         # call create function with parms
 
+    def normalization(self, data):
+        sorted_data = sorted(data.items(), key=lambda x: x[1])
+        print('++++ sorted_data +++++')
+        print(sorted_data)
+
+        
+        return ""
 
     def computeReputation(self, workerIds):
         # current time in millisecond
@@ -155,20 +181,20 @@ class JobClient:
         else:
             raise JobException("Could not retrieve game listing.")
 
-        print('++++++++job record in chain++++++++')
-        print(job_record)
+        # print('++++++++job record in chain++++++++')
+        # print(job_record)
         
         # time factor based reputation calculation
         # based on running history
         score_running_based = self.computeBasedOnRunningTime(current_time, workerIds, job_record)
-        print('++++++++ score_running_based n++++++++')
-        print(score_running_based)
+        # print('++++++++ score_running_based n++++++++')
+        # print(score_running_based)
 
         # rewards based reputation calculation
         # based on extra rewards, reflecting histroy performance
         score_rewards_based = self.computeBasedOnRewards(current_time, workerIds, job_record)
-        print('++++++++ score_rewards_based n++++++++')
-        print(score_rewards_based)
+        # print('++++++++ score_rewards_based n++++++++')
+        # print(score_rewards_based)
         reputation_workers = {}
 
         for workerId in workerIds:
@@ -189,8 +215,8 @@ class JobClient:
             for record in records:
                 if float(record['end_time']) > current_time-PERIOD:
                     job_num_all += 1
-        print('++++ number of all jobs+++++')
-        print(job_num_all)
+        # print('++++ number of all jobs+++++')
+        # print(job_num_all)
         # the number of jobs of each worker within 10 days
         job_num_worker = {}
         # the start time of the first job for each worker
