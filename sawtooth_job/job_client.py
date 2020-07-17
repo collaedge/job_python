@@ -139,7 +139,9 @@ class JobClient:
         print('++++ working_time +++++')
         print(working_time)
 
-        self.normalization(working_time)
+        normalized_working_time = self.normalization(working_time)
+        print('++++ normalized_working_time +++++')
+        print(normalized_working_time)
         # print('++++ sorted worker_delays +++++')
         # print(normalization(worker_delays))
 
@@ -151,8 +153,13 @@ class JobClient:
         print('++++ sorted_data +++++')
         print(sorted_data)
 
-        
-        return ""
+        max = sorted_data[len(data)-1][1]
+        min = sorted_data[0][1]
+
+        normalized = {}
+        for key in data.keys():
+            normalized[key] = (data[key] - min) / (max - min)
+        return normalized
 
     def computeReputation(self, workerIds):
         # current time in millisecond
