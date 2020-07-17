@@ -352,7 +352,7 @@ def do_workers(args):
     print("do workers response: {}".format(response))
 
 
-def create_job(self, args, workerId, publisherId, start_time, end_time, deadline, base):
+def create_job(args, workerId, publisherId, start_time, end_time, deadline, base):
     keyfile = _get_keyfile(args)
     # auth_user, auth_password = _get_auth_info(args)
 
