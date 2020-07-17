@@ -153,18 +153,34 @@ class JobClient:
 
         # compute scores for workers, choose the best
         # call create function with parms
+        return self.chooseOne(workers_id, normalized_working_time, normalized_delay, normalized_repus)
+
+    def chooseOne(self, workers, working_time, delay, reputation):
+        delay_weight = 0.3
+        working_time_weight = 0.3
+        reputation_weight = 0.4
+
+        combine = {}
+        for workerId in workers:
+            combine[workerId] = reputation_weight*reputation[workerId] 
+            - working_time_weight*working_time[workerId] 
+            - delay_weight*delay[workerId]
+        print('++++ choose one combine +++++')
+        print(combine)
+
+        s = sorted(combine.items(), key=lambda x: x[1],reversed = True)
+
+        return s[0]
+
 
     def normalization(self, data):
         sorted_data = sorted(data.items(), key=lambda x: x[1])
-        print('++++ sorted_data +++++')
-        print(sorted_data)
-
         max = sorted_data[len(data)-1][1]
         min = sorted_data[0][1]
-
         normalized = {}
         for key in data.keys():
             normalized[key] = (data[key] - min) / (max - min)
+
         return normalized
 
     def computeReputation(self, workerIds):

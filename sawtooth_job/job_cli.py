@@ -330,6 +330,9 @@ def do_workers(args):
         worker1, worker2, worker3 
     )
 
+    print('++++ worker1 ++++')
+    print(worker1)
+
     print("do workers response: {}".format(response))
 
 
