@@ -140,8 +140,14 @@ class JobClient:
         print(working_time)
 
         normalized_working_time = self.normalization(working_time)
+        normalized_delay = self.normalization(worker_delays)
+        normalized_repus = self.normalization(repus)
         print('++++ normalized_working_time +++++')
         print(normalized_working_time)
+        print('++++ normalized_delay +++++')
+        print(normalized_delay)
+        print('++++ normalized_repus +++++')
+        print(normalized_repus)
         # print('++++ sorted worker_delays +++++')
         # print(normalization(worker_delays))
 
