@@ -205,9 +205,9 @@ def add_workers_parser(subparsers, parent_parser):
         help='specify URL of REST API')
 
     parser.add_argument(
-        '--username',
+        'username',
         type=str,
-        help="identify name of user's private key file")
+        help="must provide username, identify name of user's private key file")
 
     parser.add_argument(
         '--key-dir',
@@ -339,28 +339,28 @@ def do_workers(args):
     if worker1 is not None: 
         workerId, publisherId, start_time, end_time, deadline = worker1.split(',')
         if response[0] == workerId:
-            create_job(publisherId, workerId, publisherId, float(start_time), float(end_time), float(deadline), float(base))
+            create_job(args, workerId, publisherId, float(start_time), float(end_time), float(deadline), float(base))
     if worker2 is not None:
         workerId, publisherId, start_time, end_time, deadline = worker2.split(',')
         if response[0] == workerId:
-            create_job(publisherId, workerId, publisherId, float(start_time), float(end_time), float(deadline), float(base))
+            create_job(args, workerId, publisherId, float(start_time), float(end_time), float(deadline), float(base))
     if worker3 is not None:
         workerId, publisherId, start_time, end_time, deadline = worker3.split(',')
         if response[0] == workerId:
-            create_job(publisherId, workerId, publisherId, float(start_time), float(end_time), float(deadline), float(base))
+            create_job(args, workerId, publisherId, float(start_time), float(end_time), float(deadline), float(base))
     
     print("do workers response: {}".format(response))
 
 
-def create_job(self, keyfile, workerId, publisherId, start_time, end_time, deadline, base_rewards):
-    keyfile = _get_keyfile(keyfile)
+def create_job(self, args, workerId, publisherId, start_time, end_time, deadline, base):
+    keyfile = _get_keyfile(args)
     # auth_user, auth_password = _get_auth_info(args)
 
     client = JobClient(base_url=DEFAULT_URL, keyfile=keyfile)
     response = client.create(
         workerId, publisherId,
         start_time, end_time, deadline,
-        base_rewards)
+        base)
 
     print("create job Response: {}".format(response))
 
