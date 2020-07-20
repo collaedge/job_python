@@ -45,7 +45,7 @@ def _sha512(data):
 # constant
 P = 0.8
 # ten days
-PERIOD = 10*24*60*60*1000
+PERIOD = 30*24*60*60*1000
 
 class JobClient:
     
@@ -289,7 +289,10 @@ class JobClient:
         for workerId, v in worker_start.items():
             running_time[workerId] = math.e**(-1/(current_time - v + 1))
         for workerId, v in job_num_worker.items():
-            averge_job[workerId] = v / (2 * (job_num_all/4))
+            if job_num_all > 0:
+                averge_job[workerId] = v / (2 * (job_num_all/4))
+            else:
+                averge_job[workerId] = 0
         print('++++ running_time +++++')
         print(running_time)
         print('++++ averge_job +++++')
