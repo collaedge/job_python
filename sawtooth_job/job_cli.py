@@ -327,13 +327,17 @@ def do_workers(args):
     worker1 = args.worker1
     worker2 = args.worker2
     worker3 = args.worker3
+    worker4 = args.worker4
+    worker5 = args.worker5
+    worker6 = args.worker6
+    worker7 = args.worker7
     base = args.base
 
     url = _get_url(args)
     client = JobClient(base_url=url, keyfile=None)
 
     response = client.chooseWorker(
-        worker1, worker2, worker3 
+        worker1, worker2, worker3, worker4, worker5, worker6, worker7 
     )
 
     if worker1 is not None: 
@@ -348,7 +352,26 @@ def do_workers(args):
         workerId, publisherId, start_time, end_time, deadline = worker3.split(',')
         if response[0] == workerId:
             create_job(args, workerId, publisherId, float(start_time), float(end_time), float(deadline), float(base))
-    
+    if worker3 is not None:
+        workerId, publisherId, start_time, end_time, deadline = worker3.split(',')
+        if response[0] == workerId:
+            create_job(args, workerId, publisherId, float(start_time), float(end_time), float(deadline), float(base))
+    if worker4 is not None:
+        workerId, publisherId, start_time, end_time, deadline = worker4.split(',')
+        if response[0] == workerId:
+            create_job(args, workerId, publisherId, float(start_time), float(end_time), float(deadline), float(base))
+    if worker5 is not None:
+        workerId, publisherId, start_time, end_time, deadline = worker5.split(',')
+        if response[0] == workerId:
+            create_job(args, workerId, publisherId, float(start_time), float(end_time), float(deadline), float(base))
+    if worker6 is not None:
+        workerId, publisherId, start_time, end_time, deadline = worker6.split(',')
+        if response[0] == workerId:
+            create_job(args, workerId, publisherId, float(start_time), float(end_time), float(deadline), float(base))
+    if worker7 is not None:
+        workerId, publisherId, start_time, end_time, deadline = worker7.split(',')
+        if response[0] == workerId:
+            create_job(args, workerId, publisherId, float(start_time), float(end_time), float(deadline), float(base))
     print("do workers response: {}".format(response))
 
 

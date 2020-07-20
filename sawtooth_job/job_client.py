@@ -96,7 +96,7 @@ class JobClient:
             )
 
     # get job response as input, choose a worker
-    def chooseWorker(self, worker1, worker2, worker3):
+    def chooseWorker(self, worker1, worker2, worker3, worker4, worker5, worker6, worker7):
         # get workers response, pick finish time as a param
         workers_id = []
         # the time workers finish the job
@@ -116,6 +116,25 @@ class JobClient:
             workers_id.append(workerId)
             working_time[workerId] = float(end_time) - float(start_time)
 
+        if worker4 is not None:
+            workerId, publisherId, start_time, end_time, deadline = worker4.split(',')
+            workers_id.append(workerId)
+            working_time[workerId] = float(end_time) - float(start_time)
+        
+        if worker5 is not None:
+            workerId, publisherId, start_time, end_time, deadline = worker5.split(',')
+            workers_id.append(workerId)
+            working_time[workerId] = float(end_time) - float(start_time)
+
+        if worker6 is not None:
+            workerId, publisherId, start_time, end_time, deadline = worker6.split(',')
+            workers_id.append(workerId)
+            working_time[workerId] = float(end_time) - float(start_time)
+
+        if worker7 is not None:
+            workerId, publisherId, start_time, end_time, deadline = worker7.split(',')
+            workers_id.append(workerId)
+            working_time[workerId] = float(end_time) - float(start_time)
 
         # get reputation of workers
         repus = self.computeReputation(workers_id)
@@ -126,7 +145,11 @@ class JobClient:
             'server_a': 103,
             'server_b': 136,
             'server_c': 115,
-            'server_d': 124
+            'server_d': 124,
+            'server_e': 109,
+            'server_f': 136,
+            'server_g': 115,
+            'server_h': 129,
         }
         worker_delays = {}
         for w in workers_id:
@@ -183,7 +206,7 @@ class JobClient:
     def computeReputation(self, workerIds):
         # current time in millisecond
         # current_time = time.time()
-        current_time = 1593215682000
+        current_time = 1594303200000
         # get all job from chain
         job_list = [
             job.split(',')
