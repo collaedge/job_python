@@ -193,11 +193,22 @@ def add_workers_parser(subparsers, parent_parser):
         '--worker3',
         type=str,
         help='worker3 response, <workerId,publisherId,start_time,end_time,deadline,base_rewards>')
-
     parser.add_argument(
-        '--base',
+        '--worker4',
         type=str,
-        help='publisher provide base rewards')
+        help='worker4 response, <workerId,publisherId,start_time,end_time,deadline,base_rewards>')
+    parser.add_argument(
+        '--worker5',
+        type=str,
+        help='worker5 response, <workerId,publisherId,start_time,end_time,deadline,base_rewards>')
+    parser.add_argument(
+        '--worker6',
+        type=str,
+        help='worker6 response, <workerId,publisherId,start_time,end_time,deadline,base_rewards>')
+    parser.add_argument(
+        '--worker7',
+        type=str,
+        help='worker7 response, <workerId,publisherId,start_time,end_time,deadline,base_rewards>')
 
     parser.add_argument(
         '--url',
@@ -208,6 +219,11 @@ def add_workers_parser(subparsers, parent_parser):
         'username',
         type=str,
         help="must provide username, identify name of user's private key file")
+    
+    parser.add_argument(
+        'base',
+        type=str,
+        help='publisher provide base rewards')
 
     parser.add_argument(
         '--key-dir',
