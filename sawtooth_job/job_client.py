@@ -338,7 +338,7 @@ class JobClient:
         combined_rewards = rewards_within_period.copy()
         for workerId, records in rewards_execeed_period.items():
             for record in records:
-                if combined_rewards.has_key(workerId):
+                if workerId in combined_rewards:
                     combined_rewards[workerId].append(record)
                 else:
                     combined_rewards.setdefault(workerId, []).append(record)
