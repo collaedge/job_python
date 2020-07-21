@@ -199,8 +199,10 @@ class JobClient:
         min = sorted_data[0][1]
         normalized = {}
         for key in data.keys():
-            normalized[key] = (data[key] - min) / (max - min)
-
+            if max == min:
+                normalized[key] = 1
+            else:
+                normalized[key] = (data[key] - min) / (max - min)
         return normalized
 
     def computeReputation(self, workerIds):
