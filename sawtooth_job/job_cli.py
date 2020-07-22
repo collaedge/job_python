@@ -178,10 +178,10 @@ def add_broadcast_parser(subparsers, parent_parser):
         help='Broadcast job request to other hosts',
         parents=[parent_parser])
 
-    parser.add_argument(
-        'publisher',
-        type=str,
-        help="specify publisher name")
+    # parser.add_argument(
+    #     'publisher',
+    #     type=str,
+    #     help="specify publisher name")
 
 def add_workers_parser(subparsers, parent_parser):
     parser = subparsers.add_parser(
@@ -350,9 +350,9 @@ def do_create(args):
     print("Response: {}".format(response))
 
 def do_broadcast(args):
-    publisher = args.publisher
-
-    tcp_client = TcpClient(publisher)
+    # publisher = args.publisher
+    name = raw_input("Please input publiser name > ")
+    tcp_client = TcpClient(name)
     tcp_client.run()
 
 def do_workers(args):
