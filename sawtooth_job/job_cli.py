@@ -140,7 +140,7 @@ def add_create_parser(subparsers, parent_parser):
 def add_list_parser(subparsers, parent_parser):
     parser = subparsers.add_parser(
         'list',
-        help='Displays information for all xo games',
+        help='Displays all jobs',
         description='Displays information for all xo games in state, showing '
         'the players, the game state, and the board for each game.',
         parents=[parent_parser])
@@ -196,7 +196,7 @@ def add_broadcast_parser(subparsers, parent_parser):
 def add_workers_parser(subparsers, parent_parser):
     parser = subparsers.add_parser(
         'workers',
-        help='Displays information about an xo game',
+        help='input multiple workers',
         description='Displays the xo game <name>, showing the players, '
         'the game state, and the board',
         parents=[parent_parser])
@@ -289,6 +289,7 @@ def create_parser(prog_name):
     add_create_parser(subparsers, parent_parser)
     add_list_parser(subparsers, parent_parser)
     add_workers_parser(subparsers, parent_parser)
+    add_broadcast_parser(subparsers, parent_parser)
 
     return parser
 
