@@ -2,7 +2,7 @@ from sawtooth_job.tcp_server import send,receive
 from socket import *
 import sys
 import select
-import cPickle
+import pickle as cPickle
 import struct
 import signal
  
