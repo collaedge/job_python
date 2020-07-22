@@ -170,6 +170,26 @@ def add_list_parser(subparsers, parent_parser):
         help='specify password for authentication if REST API '
         'is using Basic Auth')
 
+def add_broadcast_parser(subparsers, parent_parser):
+    parser = subparsers.add_parser(
+        'broadcast',
+        help='Broadcast job request to other hosts',
+        parents=[parent_parser])
+
+    parser.add_argument(
+        'task_name',
+        type=str,
+        help='specify a task name')
+
+    parser.add_argument(
+        'base_rewards',
+        type=str,
+        help='specify base rewards')
+
+    parser.add_argument(
+        'publisher',
+        type=str,
+        help="specify publisher name")
 
 def add_workers_parser(subparsers, parent_parser):
     parser = subparsers.add_parser(
@@ -336,6 +356,11 @@ def do_create(args):
 
     print("Response: {}".format(response))
 
+def do_broadcast(args):
+    task_name = args.task_name
+    base_rewards = args.base_rewards
+    publisher = args.publisher
+
 def do_workers(args):
     print('+++workers+++')
     print(args)
@@ -443,6 +468,8 @@ def main(prog_name=os.path.basename(sys.argv[0]), args=None):
         do_list(args)
     elif args.command == 'workers':
         do_workers(args)
+    elif args.command == 'broadcast':
+        do_broadcast(args)
     # elif args.command == 'take':
     #     do_take(args)
     else:
