@@ -1,4 +1,4 @@
-from tcp_server import send,receive
+from sawtooth_job.tcp_server import send,receive
 from socket import *
 import sys
 import select
