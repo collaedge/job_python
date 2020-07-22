@@ -6,7 +6,7 @@ import pickle as cPickle
 from socket import *
 HOST = '136.186.108.248'
 def send(channel,*args):
-  buffer = cPickle.dumps(args)
+  buffer = cPickle.dumps(args, protocol=2)
   value = htonl(len(buffer))
   size = struct.pack("L",value)
   channel.send(size)

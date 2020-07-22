@@ -365,7 +365,7 @@ def do_broadcast(args):
     publisher = args.publisher
 
     tcp_client = TcpClient(publisher)
-    tcp_client.run()
+    tcp_client.run(task_name, base_rewards)
 
 def do_workers(args):
     print('+++workers+++')
