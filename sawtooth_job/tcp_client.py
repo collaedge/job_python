@@ -16,9 +16,9 @@ class TcpClient(object):
       self.sock = socket(AF_INET,SOCK_STREAM)
       self.sock.connect((self.host,self.port))
       self.connected = True
-      send(self.sock,self.name)
-      data= receive(self.sock)
-      addr = data
+      # send(self.sock,self.name)
+      # data= receive(self.sock)
+      # addr = data
     except error as e:#socket.serro
       print('Failed to connect to server')
       sys.exit(1)
