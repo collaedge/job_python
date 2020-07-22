@@ -62,8 +62,8 @@ class ChatClient(object):
             send(self.sock,self.name)
             data= receive(self.sock)
             addr = data
-        except error,e:#socket.serro
-            print 'Failed to connect to chat server'
+        except error as e:#socket.serro
+            print('Failed to connect to chat server')
             sys.exit(1)
     def run(self):
         while True:
@@ -77,14 +77,14 @@ class ChatClient(object):
                     else:
                         data=receive(self.sock)
                         if not data:
-                            print 'Client shutting down.'
+                            print('Client shutting down.')
                             self.connected = False
                             break
                         else:
                             sys.stdout.write(data+'\n')
                             sys.stdout.flush()
             except KeyboardInterrupt:
-                print 'Client interrupted'
+                print ('Client interrupted')
                 self.sock.close()
                 break
 if __name__ == "__main__":
