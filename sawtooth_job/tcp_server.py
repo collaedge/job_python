@@ -4,7 +4,7 @@ import select
 import signal
 import cPickle
 from socket import *
-HOST = ''
+HOST = '136.186.108.248'
 def send(channel,*args):
   buffer = cPickle.dumps(args)
   value = htonl(len(buffer))
@@ -23,7 +23,7 @@ def receive(channel):
     buf += channel.recv(size-len(buf))
   return cPickle.loads(buf)[0]
  
-class ChatServer(object):
+class TcpServer(object):
   def __init__(self,PORT,backlog = 5):
     self.clients = 0
     self.clientmap = {}
@@ -56,16 +56,13 @@ class ChatServer(object):
       for sock in readable:
         if sock == self.server:
           client,address = self.server.accept()
-          print("Chat server: connected from",address)
+          print("server: connected from",address)
           self.clients += 1
           cname = receive(client)
           send(client,str(address[0]))
           inputs.append(client)
           self.clientmap[client] = (address,cname)
           msg = "(Connected : New Client(%d) from %s)\n"%(self.clients,self.get_client_name(client))
-          message = "At present, only one of you is in the chat room!"
-          if self.clients == 1:
-            send(client,message)
           for output in self.outputs:
             send(output,msg)
           self.outputs.append(client)
@@ -86,15 +83,12 @@ class ChatServer(object):
               inputs.remove(sock)
               self.outputs.remove(sock)
               msg = '(Now hung up: Client from %s)'%self.get_client_name(sock)
-              message = "At present, only one of you is in the chat room!"
               for output in self.outputs:
                 send(output,msg)
-              if self.clients == 1:
-                send(self.outputs[0],message)
           except error as e:
             inputs.remove(sock)
             self.outputs.remove(sock)
     self.server.close()
 if __name__ == "__main__":
-    server = ChatServer(6004)
+    server = TcpServer(6004)
     server.run()

@@ -28,6 +28,8 @@ from colorlog import ColoredFormatter
 from sawtooth_job.job_client import JobClient
 from sawtooth_job.job_exceptions import JobException
 
+from sawtooth_job.tcp_client import TcpClient
+
 
 DISTRIBUTION_NAME = 'sawtooth-job'
 
@@ -360,6 +362,9 @@ def do_broadcast(args):
     task_name = args.task_name
     base_rewards = args.base_rewards
     publisher = args.publisher
+
+    tcp_client = TcpClient(publisher)
+    tcp_client.run()
 
 def do_workers(args):
     print('+++workers+++')
