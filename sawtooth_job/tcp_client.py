@@ -16,22 +16,20 @@ class TcpClient(object):
       self.sock = socket(AF_INET,SOCK_STREAM)
       self.sock.connect((self.host,self.port))
       self.connected = True
-      # send(self.sock,self.name)
-      # data= receive(self.sock)
-      # addr = data
+    #   send(self.sock,self.name)
+    #   data= receive(self.sock)
+    #   addr = data
     except error as e:#socket.serro
       print('Failed to connect to server')
       sys.exit(1)
-  def run(self, task_name, base_rewards):
+  def run(self):
     while True:
       try:
         readable,writeable,exception = select.select([0,self.sock],[],[])
         for sock in readable:
           if sock == 0:
-            data = {
-                'task_name': task_name,
-                'base_rewards': base_rewards
-            }
+            print('send data, format: task_name,base_rewards')
+            data = sys.stdin.readline().strip()
             if data:
               send(self.sock,data)
           else:

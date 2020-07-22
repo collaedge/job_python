@@ -179,16 +179,6 @@ def add_broadcast_parser(subparsers, parent_parser):
         parents=[parent_parser])
 
     parser.add_argument(
-        'task_name',
-        type=str,
-        help='specify a task name')
-
-    parser.add_argument(
-        'base_rewards',
-        type=str,
-        help='specify base rewards')
-
-    parser.add_argument(
         'publisher',
         type=str,
         help="specify publisher name")
@@ -360,12 +350,10 @@ def do_create(args):
     print("Response: {}".format(response))
 
 def do_broadcast(args):
-    task_name = args.task_name
-    base_rewards = args.base_rewards
     publisher = args.publisher
 
     tcp_client = TcpClient(publisher)
-    tcp_client.run(task_name, base_rewards)
+    tcp_client.run()
 
 def do_workers(args):
     print('+++workers+++')
