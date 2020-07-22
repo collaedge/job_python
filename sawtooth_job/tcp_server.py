@@ -2,7 +2,7 @@ import sys
 import struct
 import select
 import signal
-import pickle as cPickle
+import cPickle
 from socket import *
 HOST = '136.186.108.248'
 def send(channel,*args):

@@ -351,7 +351,7 @@ def do_create(args):
 
 def do_broadcast(args):
     # publisher = args.publisher
-    name = input("Please input publiser name > ")
+    name = raw_input("Please input publiser name > ")
     tcp_client = TcpClient(name)
     tcp_client.run()
 
