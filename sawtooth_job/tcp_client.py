@@ -45,10 +45,11 @@ class TcpClient:
                                 end_time = time.time()
                                 job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=None)
                                 response = data + ',' + start_time + ',' + end_time
-                                sys.stdout.write(response+'\n')
-                                sys.stdout.flush()
                                 # choose workers
-                                job_client.chooseWorker2(response)
+                                s = job_client.chooseWorker2(response)
+                                sys.stdout.write(s+'\n')
+                                sys.stdout.flush()
+
             except KeyboardInterrupt:
                 print('Client interrupted')
                 self.sock.close()
