@@ -32,7 +32,7 @@ class TcpServer:
     def accept_new_connection(self):
         newsock, (remhost, remport) = self.srvsock.accept()
         self.descripors.append(newsock)
-        newsock.send("You are Connected\r\n".encode('utf8'))
+        # newsock.send("You are Connected\n".encode('utf8'))
         # str_send = 'Client joined %s:%s' % (remhost, remport)
         # self.broadcast_str(str_send, newsock)
  
