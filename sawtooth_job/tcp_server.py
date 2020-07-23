@@ -1,94 +1,47 @@
-import sys
-import struct
+import socket
 import select
-import signal
-import cPickle
-from socket import *
-HOST = '136.186.108.248'
-def send(channel,*args):
-  buffer = cPickle.dumps(args, protocol=2)
-  value = htonl(len(buffer))
-  size = struct.pack("L",value)
-  channel.send(size)
-  channel.send(buffer)
-def receive(channel):
-  size = struct.calcsize("L")
-  size = channel.recv(size)
-  try:
-    size = ntohl(struct.unpack("L",size)[0])
-  except struct.error as e:
-    return ''
-  buf = ''
-  while len(buf) < size:
-    buf += channel.recv(size-len(buf))
-  return cPickle.loads(buf)[0]
  
-class TcpServer(object):
-  def __init__(self,PORT,backlog = 5):
-    self.clients = 0
-    self.clientmap = {}
-    self.outputs = [] 
-    self.server = socket(AF_INET, SOCK_STREAM)
-    self.server.setsockopt(SOL_SOCKET,SO_REUSEADDR,1)
-    self.server.bind((HOST,PORT))
-    self.server.listen(backlog)
-    signal.signal(signal.SIGINT,self.signalhandler)
+class ChatServer:
+    def __init__(self, port):
+        self.port = port
+        self.srvsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.srvsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.srvsock.bind(('136.186.108.248', port))
+        self.srvsock.listen(10)
+        self.descripors = [self.srvsock]
+        print("Server started!")
  
-  def signalhandler(self,signum,frame):
-    print("Shutting down server ...")
-    for output in self.outputs:
-      output.close()
-    self.server.close()
+    def run(self):
+        while True:
+            (sread, swrite, sexc) = select.select(self.descripors, [], [])
+            for sock in sread:
+                if sock == self.srvsock:
+                    self.accept_new_connection()
+                else:
+                    str_send = sock.recv(1024).decode('utf-8')
+                    host, port = sock.getpeername()
+                    if str_send == '':
+                        str_send = 'Client left %s:%s\r\n' % (host, port)
+                        self.broadcast_str(str_send, sock)
+                        sock.close
+                        self.descripors.remove(sock)
+                    else:
+                        newstr = '[%s:%s] %s' % (host, port, str_send)
+                        self.broadcast_str(newstr, sock)
  
-  def get_client_name(self,client):
-    info = self.clientmap[client]
-    host,port,name = info[0][0],info[0][1],info[1]
-    return ':'.join((('@'.join((name,host))),str(port)))
+    def accept_new_connection(self):
+        newsock, (remhost, remport) = self.srvsock.accept()
+        self.descripors.append(newsock)
+        newsock.send("You are Connected\r\n".encode('utf8'))
+        # str_send = 'Client joined %s:%s' % (remhost, remport)
+        # self.broadcast_str(str_send, newsock)
  
-  def run(self):
-    inputs = [self.server]
-    print('Waiting for connect...')
-    while True:
-      try:
-        readable,writeable,execption = select.select(inputs,self.outputs,[])
-      except select.error as e:
-        break
-      for sock in readable:
-        if sock == self.server:
-          client,address = self.server.accept()
-          print("server: connected from",address)
-          self.clients += 1
-          cname = receive(client)
-          send(client,str(address[0]))
-          inputs.append(client)
-          self.clientmap[client] = (address,cname)
-          msg = "(Connected : New Client(%d) from %s)\n"%(self.clients,self.get_client_name(client))
-          for output in self.outputs:
-            send(output,msg)
-          self.outputs.append(client)
+    def broadcast_str(self, str_send, my_sock):
+        for sock in self.descripors:
+            if sock != self.srvsock and sock != my_sock:
+                sock.send(str_send.encode('utf8'))
+        # print("forward:"+str_send+"       --- successfully")
  
-        #elif sock == sys.stdin:
-          #break
-        else:
-          try:
-            data = receive(sock)
-            if data:
-              msg = '[' + self.get_client_name(sock)+ '] >> ' + data
-              for output in self.outputs:
-                if output!=sock:
-                  send(output,msg)
-            else:
-              self.clients-=1
-              sock.close()
-              inputs.remove(sock)
-              self.outputs.remove(sock)
-              msg = '(Now hung up: Client from %s)'%self.get_client_name(sock)
-              for output in self.outputs:
-                send(output,msg)
-          except error as e:
-            inputs.remove(sock)
-            self.outputs.remove(sock)
-    self.server.close()
+
 if __name__ == "__main__":
-    server = TcpServer(6004)
-    server.run()
+    ChatServer(6009).run()
