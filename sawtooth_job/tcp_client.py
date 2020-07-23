@@ -42,7 +42,7 @@ class TcpClient:
                                 sys.stdout.write('received from '+req_user+'\n')
                                 sys.stdout.flush()
                                 self.sock.send((self.name+',res,yes').encode('utf-8'))
-                            elif data_list[1] == 'res' & req_user == self.name:
+                            elif data_list[1] == 'res' and req_user == self.name:
                                 # choose workers
                                 end_time = time.time()
                                 sys.stdout.write(data+'\n')

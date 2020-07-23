@@ -27,7 +27,7 @@ class TcpServer:
                         self.descripors.remove(sock)
                     else:
                         newstr = '[%s:%s] %s' % (host, port, str_send)
-                        self.broadcast_str(newstr, sock)
+                        self.broadcast_str(str_send, sock)
  
     def accept_new_connection(self):
         newsock, (remhost, remport) = self.srvsock.accept()
