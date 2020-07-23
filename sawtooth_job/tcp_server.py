@@ -32,6 +32,7 @@ class TcpServer:
     def accept_new_connection(self):
         newsock, (remhost, remport) = self.srvsock.accept()
         self.descripors.append(newsock)
+        print("clinet %s connected!", remhost)
         # newsock.send("You are Connected\n".encode('utf8'))
         # str_send = 'Client joined %s:%s' % (remhost, remport)
         # self.broadcast_str(str_send, newsock)
@@ -39,7 +40,7 @@ class TcpServer:
     def broadcast_str(self, str_send, my_sock):
         for sock in self.descripors:
             if sock != self.srvsock and sock != my_sock:
-                sock.send(str_send.encode('utf8'))
+                sock.send(str_send.encode('utf-8'))
         # print("forward:"+str_send+"       --- successfully")
  
 

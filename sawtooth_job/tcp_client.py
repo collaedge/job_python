@@ -28,7 +28,7 @@ class TcpClient:
                         if tmp:
                             start_time = time.time()
                             data = self.name + ',' + tmp
-                            self.sock.send(data.encode('utf8'))
+                            self.sock.send(data.encode('utf-8'))
                     else:
                         data = sock.recv(1024).decode('utf-8')
                         if data:
@@ -41,7 +41,7 @@ class TcpClient:
                                 req_user = data_list[0]
                                 sys.stdout.write('received from '+req_user+'\n')
                                 sys.stdout.flush()
-                                self.sock.send(self.name+',res,yes')
+                                self.sock.send((self.name+',res,yes').encode('utf-8'))
                             elif data_list[1] == 'res' & req_user == self.name:
                                 # choose workers
                                 end_time = time.time()
