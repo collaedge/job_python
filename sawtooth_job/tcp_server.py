@@ -24,7 +24,7 @@ class TcpServer:
                     if str_send == 'exit':
                         str_send = 'Client left %s:%s\r\n' % (host, port)
                         self.broadcast_str(str_send, sock)
-                        sock.close
+                        sock.close()
                         self.descripors.remove(sock)
                     else:
                         newstr = '[%s:%s] %s' % (host, port, str_send)

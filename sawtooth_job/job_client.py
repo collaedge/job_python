@@ -23,6 +23,7 @@ import random
 import requests
 import yaml
 import math
+import sys
 
 from sawtooth_signing import create_context
 from sawtooth_signing import CryptoFactory
@@ -177,7 +178,8 @@ class JobClient:
         return self.chooseOne(workers_id, normalized_working_time, normalized_delay, normalized_repus)
 
     def chooseWorker2(self, data):
-        print(data)
+        sys.stdout.write(data+'\n')
+        sys.stdout.flush()
         workers = {}
         for v in data:
             temp = v.split(',')
