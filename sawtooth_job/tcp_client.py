@@ -18,6 +18,7 @@ class TcpClient:
             print('Failed to connect to chat server')
             sys.exit(1)
     def run(self):
+        req_user = ''
         while True:
             try:
                 readable,writeable,exception = select.select([0,self.sock],[],[])
@@ -35,20 +36,30 @@ class TcpClient:
                         data = sock.recv(1024).decode('utf-8')
                         if data:
                             data_list = data.split(',')
-                            req_user = ''
                             if data_list[1] == 'req':
                                 # whether accept req
                                 req_user = data_list[0]
-                                print('received from '+req_user+'\n')
+                                sys.stdout.write('received req from '+req_user+' data: '+data+'\n')
+                                sys.stdout.flush()
                                 self.sock.send((self.name+',res,yes').encode('utf-8'))
                             elif data_list[1] == 'res' and req_user == self.name:
+                                sys.stdout.write('received res from '+req_user+' data: '+data+'\n')
+                                sys.stdout.flush()
                                 end_time = time.time()
-                                job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=None)
+                                job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=self.name)
                                 response = data + ',' + start_time + ',' + end_time
                                 # choose workers
                                 s = job_client.chooseWorker2(response)
                                 sys.stdout.write(s+'\n')
                                 sys.stdout.flush()
+                                str_out = 'do,' + s
+                                self.sock.send(str_out.encode('utf-8'))
+                            elif data_list[1] == self.name and data_list[0] == 'do':
+                                job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=self.name)
+                                start_time = time.time()
+                                time.sleep(5)
+                                end_time = time.time()
+                                job_client.create(self.name,req_user ,start_time, end_time, 5500, 20)
 
             except KeyboardInterrupt:
                 print('Client interrupted')

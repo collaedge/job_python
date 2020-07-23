@@ -26,6 +26,7 @@ class TcpServer:
                         self.broadcast_str(str_send, sock)
                         sock.close()
                         self.descripors.remove(sock)
+                        break
                     else:
                         newstr = '[%s:%s] %s' % (host, port, str_send)
                         self.broadcast_str(str_send, sock)
