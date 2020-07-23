@@ -176,6 +176,19 @@ class JobClient:
         # call create function with parms
         return self.chooseOne(workers_id, normalized_working_time, normalized_delay, normalized_repus)
 
+    def chooseWorker2(self, data):
+        print(data)
+        workers = {}
+        for v in data:
+            temp = v.split(',')
+            if temp[2] == 'yes':
+                workers.setdefault(temp[0], []).append({
+                    'start_time': temp[3],
+                    'end_time': temp[4],
+                })
+        print('worker ', workers)
+
+
     def chooseOne(self, workers, working_time, delay, reputation):
         delay_weight = 0.3
         working_time_weight = 0.3

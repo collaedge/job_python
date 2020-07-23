@@ -3,6 +3,8 @@ import select
 import sys
 import time
 
+from sawtooth_job.job_client import JobClient
+
 class TcpClient:
     def __init__(self,name):
         self.name = name
@@ -40,13 +42,13 @@ class TcpClient:
                                 print('received from '+req_user+'\n')
                                 self.sock.send((self.name+',res,yes').encode('utf-8'))
                             elif data_list[1] == 'res' and req_user == self.name:
-                                # choose workers
                                 end_time = time.time()
-                                print(start_time+'\n')
-                                print(end_time+'\n')
-                                sys.stdout.write(data+'\n')
+                                job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=None)
+                                response = data + ',' + start_time + ',' + end_time
+                                sys.stdout.write(response+'\n')
                                 sys.stdout.flush()
-
+                                # choose workers
+                                job_client.chooseWorker2(response)
             except KeyboardInterrupt:
                 print('Client interrupted')
                 self.sock.close()

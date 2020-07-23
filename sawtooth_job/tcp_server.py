@@ -21,7 +21,7 @@ class TcpServer:
                     str_send = sock.recv(1024).decode('utf-8')
                     print('send data: ', str_send)
                     host, port = sock.getpeername()
-                    if str_send == '':
+                    if str_send == 'exit':
                         str_send = 'Client left %s:%s\r\n' % (host, port)
                         self.broadcast_str(str_send, sock)
                         sock.close
@@ -33,7 +33,7 @@ class TcpServer:
     def accept_new_connection(self):
         newsock, (remhost, remport) = self.srvsock.accept()
         self.descripors.append(newsock)
-        print("clinet %s connected!", remhost)
+        print("clinet connected!", remhost)
         # newsock.send("You are Connected\n".encode('utf8'))
         # str_send = 'Client joined %s:%s' % (remhost, remport)
         # self.broadcast_str(str_send, newsock)
