@@ -1,7 +1,7 @@
 import socket
 import select
  
-class ChatServer:
+class TcpServer:
     def __init__(self, port):
         self.port = port
         self.srvsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -44,4 +44,4 @@ class ChatServer:
  
 
 if __name__ == "__main__":
-    ChatServer(6009).run()
+    TcpServer(6009).run()

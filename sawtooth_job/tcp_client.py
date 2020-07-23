@@ -2,7 +2,7 @@ import socket
 import select
 import sys
 
-class client:
+class TcpClient:
     def __init__(self,name):
         self.name = name
         self.host = '136.186.108.248'
