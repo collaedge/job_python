@@ -32,22 +32,19 @@ class TcpClient:
                     else:
                         data = sock.recv(1024).decode('utf-8')
                         if data:
-                            sys.stdout.write(data+'\n')
-                            sys.stdout.flush()
                             data_list = data.split(',')
                             req_user = ''
                             if data_list[1] == 'req':
                                 # whether accept req
                                 req_user = data_list[0]
-                                sys.stdout.write('received from '+req_user+'\n')
-                                sys.stdout.flush()
+                                print('received from '+req_user+'\n')
                                 self.sock.send((self.name+',res,yes').encode('utf-8'))
                             elif data_list[1] == 'res' and req_user == self.name:
                                 # choose workers
                                 end_time = time.time()
+                                print(start_time+'\n')
+                                print(end_time+'\n')
                                 sys.stdout.write(data+'\n')
-                                sys.stdout.write(start_time+'\n')
-                                sys.stdout.write(end_time+'\n')
                                 sys.stdout.flush()
 
             except KeyboardInterrupt:

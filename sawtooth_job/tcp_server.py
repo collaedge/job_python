@@ -19,6 +19,7 @@ class TcpServer:
                     self.accept_new_connection()
                 else:
                     str_send = sock.recv(1024).decode('utf-8')
+                    print('send data: ', str_send)
                     host, port = sock.getpeername()
                     if str_send == '':
                         str_send = 'Client left %s:%s\r\n' % (host, port)
