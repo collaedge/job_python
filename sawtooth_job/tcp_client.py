@@ -1,6 +1,7 @@
 import socket
 import select
 import sys
+import time
 
 class TcpClient:
     def __init__(self,name):
@@ -19,10 +20,13 @@ class TcpClient:
             try:
                 readable,writeable,exception = select.select([0,self.sock],[],[])
                 for sock in readable:
+                    start_time = 0
+                    end_time = 0
                     if sock == 0:
                         # input format <msg_type,task_name,base_rewards>
                         tmp = sys.stdin.readline().strip()
                         if tmp:
+                            start_time = time.time()
                             data = self.name + ',' + tmp
                             self.sock.send(data.encode('utf8'))
                     else:
@@ -30,6 +34,22 @@ class TcpClient:
                         if data:
                             sys.stdout.write(data+'\n')
                             sys.stdout.flush()
+                            data_list = data.split(',')
+                            req_user = ''
+                            if data_list[1] == 'req':
+                                # whether accept req
+                                req_user = data_list[0]
+                                sys.stdout.write('received from '+req_user+'\n')
+                                sys.stdout.flush()
+                                self.sock.send(self.name+',res,yes')
+                            elif data_list[1] == 'res' & req_user == self.name:
+                                # choose workers
+                                end_time = time.time()
+                                sys.stdout.write(data+'\n')
+                                sys.stdout.write(start_time+'\n')
+                                sys.stdout.write(end_time+'\n')
+                                sys.stdout.flush()
+
             except KeyboardInterrupt:
                 print('Client interrupted')
                 self.sock.close()
