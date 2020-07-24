@@ -178,7 +178,8 @@ class JobClient:
         return self.chooseOne(workers_id, normalized_working_time, normalized_delay, normalized_repus)
 
     def chooseWorker2(self, data):
-        print('chooseWorker2: '+data)
+        print('chooseWorker2: ')
+        print(data)
         sys.stdout.write(data+'\n')
         sys.stdout.flush()
         workers_id = data.split(',')
