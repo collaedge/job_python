@@ -48,7 +48,8 @@ setup(
         'protobuf',
         'sawtooth-sdk',
         'PyYAML',
-        'cbor'
+        'cbor',
+        'psutil'
     ],
     data_files=data_files,
     entry_points={

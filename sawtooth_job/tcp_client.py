@@ -2,6 +2,7 @@ import socket
 import select
 import sys
 import time
+import psutil
 
 from sawtooth_job.job_client import JobClient
 
@@ -42,6 +43,9 @@ class TcpClient:
                                 req_user = data_list[0]
                                 sys.stdout.write('received req from '+req_user+' data: '+data+'\n')
                                 sys.stdout.flush()
+                                cpu_usage = psutil.cpu_percent()
+                                sys.stdout.write('cpu_usage '+cpu_usage+'\n')
+                                sys.stdout.flush()
                                 self.sock.send((self.name+',res,yes').encode('utf-8'))
                             elif data_list[1] == 'res' and req_user == self.name:
                                 sys.stdout.write('req_user: '+req_user+' data: '+data+'\n')
@@ -49,9 +53,9 @@ class TcpClient:
                                 job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=None)
                                 # choose workers
                                 workers.append(data.split(',')[0])
-                                if len(workers) == 2 or len(workers) == 3 or len(workers) == 6:
+                                if len(workers) == 3 or len(workers) == 6:
                                     s = job_client.chooseWorker2(workers)
-                                    sys.stdout.write(s+'\n')
+                                    sys.stdout.write(s)
                                     sys.stdout.flush()
                                     str_out = 'do,' + s
                                     self.sock.send(str_out.encode('utf-8'))
