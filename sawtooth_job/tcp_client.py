@@ -5,7 +5,7 @@ import time
 import psutil
 
 from sawtooth_job.job_client import JobClient
-from sawtooth_job.job_cli import _get_keyfile
+from sawtooth_job.job_cli import *
 
 class TcpClient:
     def __init__(self,name):
