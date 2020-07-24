@@ -22,7 +22,6 @@ class TcpClient:
     def run(self):
         req_user = ''
         workers = []
-        req_rewards = ''
         while True:
             try:
                 readable,writeable,exception = select.select([0,self.sock],[],[])
@@ -34,7 +33,6 @@ class TcpClient:
                         tmp = sys.stdin.readline().strip()
                         if tmp:
                             req_user = self.name
-                            req_rewards = tmp.split(',')[2]
                             data = self.name + ',' + tmp
                             self.sock.send(data.encode('utf-8'))
                     else:
@@ -49,8 +47,10 @@ class TcpClient:
                                 cpu_usage = psutil.cpu_percent()
                                 sys.stdout.write('cpu_usage '+str(cpu_usage)+'\n')
                                 sys.stdout.flush()
+                                job_name = data.split(',')[2]
+                                rewards = data.split(',')[3]
                                 if cpu_usage < 50.0 :
-                                    self.sock.send((self.name+',res'+req_rewards).encode('utf-8'))
+                                    self.sock.send((self.name+',res,'+job_name + ',' + rewards).encode('utf-8'))
                             elif data_list[1] == 'res' and req_user == self.name:
                                 sys.stdout.write('req_user: '+req_user+' data: '+data+'\n')
                                 sys.stdout.flush()
