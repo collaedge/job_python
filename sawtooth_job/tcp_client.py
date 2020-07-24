@@ -5,6 +5,7 @@ import time
 import psutil
 
 from sawtooth_job.job_client import JobClient
+from sawtooth_job.job_cli import _get_keyfile
 
 class TcpClient:
     def __init__(self,name):
@@ -59,8 +60,10 @@ class TcpClient:
                                     sys.stdout.flush()
                                     str_out = 'do,' + s
                                     self.sock.send(str_out.encode('utf-8'))
+                                    workers.clear()
                             elif data_list[1] == self.name and data_list[0] == 'do':
-                                job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=None)
+                                keyfile = _get_keyfile(self.name)
+                                job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=keyfile)
                                 start_time = time.time()
                                 time.sleep(5)
                                 end_time = time.time()
