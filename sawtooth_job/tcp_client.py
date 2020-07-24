@@ -69,9 +69,9 @@ class TcpClient:
                                 sys.stdout.flush()
                                 keyfile = self.get_keyfile(self.name)
                                 job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=keyfile)
-                                start_time = time.time()
+                                start_time = time.time()*1000
                                 time.sleep(5)
-                                end_time = time.time()
+                                end_time = time.time()*1000
                                 job_client.create(self.name, req_user, start_time, end_time, 5500, req_rewards)
 
             except KeyboardInterrupt:
