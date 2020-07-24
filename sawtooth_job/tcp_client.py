@@ -57,15 +57,17 @@ class TcpClient:
                                 job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=None)
                                 # choose workers
                                 workers.append(data.split(',')[0])
-                                if len(workers) == 3 or len(workers) == 6:
-                                    s = job_client.chooseWorker2(workers)
-                                    sys.stdout.write(s+'\n')
+                                if len(workers) >= 3:
+                                    worker = job_client.chooseWorker2(workers)
+                                    sys.stdout.write('worker: '+worker+'\n')
                                     sys.stdout.flush()
-                                    str_out = 'do,' + s
-                                    self.sock.send(str_out.encode('utf-8'))
+                                    str_out = 'do,' + worker
                                     workers.clear()
+                                    self.sock.send(str_out.encode('utf-8'))
                             elif data_list[1] == self.name and data_list[0] == 'do':
-                                keyfile = get_keyfile(self.name)
+                                sys.stdout.write('do worker: '+self.name+'\n')
+                                sys.stdout.flush()
+                                keyfile = self.get_keyfile(self.name)
                                 job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=keyfile)
                                 start_time = time.time()
                                 time.sleep(5)
