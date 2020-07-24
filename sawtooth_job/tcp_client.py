@@ -44,7 +44,7 @@ class TcpClient:
                                 sys.stdout.flush()
                                 self.sock.send((self.name+',res,yes').encode('utf-8'))
                             elif data_list[1] == 'res' and req_user == self.name:
-                                sys.stdout.write('req_user'+req_user+' data: '+data+'\n')
+                                sys.stdout.write('req_user: '+req_user+' data: '+data+'\n')
                                 sys.stdout.flush()
                                 job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=None)
                                 # choose workers

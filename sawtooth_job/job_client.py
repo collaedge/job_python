@@ -180,18 +180,15 @@ class JobClient:
     def chooseWorker2(self, data):
         print('chooseWorker2: ')
         print(data)
-        sys.stdout.write(data+'\n')
-        sys.stdout.flush()
-        workers_id = data.split(',')
         # get reputation of workers
-        repus = self.computeReputation(workers_id)
+        repus = self.computeReputation(data)
         print('++++ reputation +++++')
         print(repus)
 
 
         sorted_repu = sorted(repus.items(), key=lambda x: x[1],reverse = True)
         print('++++ sorted_repu +++++')
-        print(repus)
+        print(sorted_repu[0])
         return sorted_repu[0]
         # normalized_working_time = self.normalization(working_time)
         # normalized_delay = self.normalization(worker_delays)
