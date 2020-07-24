@@ -189,7 +189,7 @@ class JobClient:
         sorted_repu = sorted(repus.items(), key=lambda x: x[1],reverse = True)
         print('++++ sorted_repu +++++')
         print(sorted_repu[0])
-        return sorted_repu[0]
+        return sorted_repu[0][0]
         # normalized_working_time = self.normalization(working_time)
         # normalized_delay = self.normalization(worker_delays)
         # normalized_repus = self.normalization(repus)

@@ -44,7 +44,7 @@ class TcpClient:
                                 sys.stdout.write('received req from '+req_user+' data: '+data+'\n')
                                 sys.stdout.flush()
                                 cpu_usage = psutil.cpu_percent()
-                                sys.stdout.write('cpu_usage '+cpu_usage+'\n')
+                                sys.stdout.write('cpu_usage '+str(cpu_usage)+'\n')
                                 sys.stdout.flush()
                                 self.sock.send((self.name+',res,yes').encode('utf-8'))
                             elif data_list[1] == 'res' and req_user == self.name:
