@@ -269,7 +269,8 @@ class JobClient:
         reputation_workers = {}
 
         for workerId in workerIds:
-            reputation_workers[workerId] = (2*score_running_based[workerId]*score_rewards_based[workerId]) / (score_running_based[workerId]+score_rewards_based[workerId])
+            if workerId in score_running_based and workerId in score_rewards_based:
+                reputation_workers[workerId] = (2*score_running_based[workerId]*score_rewards_based[workerId]) / (score_running_based[workerId]+score_rewards_based[workerId])
         
         return reputation_workers
 
