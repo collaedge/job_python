@@ -46,7 +46,7 @@ class TcpClient:
                             elif data_list[1] == 'res' and req_user == self.name:
                                 sys.stdout.write('req_user'+req_user+' data: '+data+'\n')
                                 sys.stdout.flush()
-                                job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=self.name)
+                                job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=None)
                                 # choose workers
                                 workers.append(data.split(',')[0])
                                 if len(workers) == 3 or len(workers) == 6:
@@ -56,7 +56,7 @@ class TcpClient:
                                     str_out = 'do,' + s
                                     self.sock.send(str_out.encode('utf-8'))
                             elif data_list[1] == self.name and data_list[0] == 'do':
-                                job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=self.name)
+                                job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=None)
                                 start_time = time.time()
                                 time.sleep(5)
                                 end_time = time.time()
