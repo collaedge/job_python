@@ -34,7 +34,7 @@ class TcpClient:
                         tmp = sys.stdin.readline().strip()
                         if tmp:
                             req_user = self.name
-                            req_rewards = float(tmp.split(',')[2])
+                            req_rewards = tmp.split(',')[2]
                             data = self.name + ',' + tmp
                             self.sock.send(data.encode('utf-8'))
                     else:
@@ -50,7 +50,7 @@ class TcpClient:
                                 sys.stdout.write('cpu_usage '+str(cpu_usage)+'\n')
                                 sys.stdout.flush()
                                 if cpu_usage < 50.0 :
-                                    self.sock.send((self.name+',res,yes').encode('utf-8'))
+                                    self.sock.send((self.name+',res'+req_rewards).encode('utf-8'))
                             elif data_list[1] == 'res' and req_user == self.name:
                                 sys.stdout.write('req_user: '+req_user+' data: '+data+'\n')
                                 sys.stdout.flush()
@@ -61,7 +61,7 @@ class TcpClient:
                                     worker = job_client.chooseWorker2(workers)
                                     sys.stdout.write('worker: '+worker+'\n')
                                     sys.stdout.flush()
-                                    str_out = 'do,' + worker
+                                    str_out = 'do,' + worker + ',' + data_list[2]
                                     workers.clear()
                                     self.sock.send(str_out.encode('utf-8'))
                             elif data_list[1] == self.name and data_list[0] == 'do':
@@ -72,7 +72,7 @@ class TcpClient:
                                 start_time = time.time()*1000
                                 time.sleep(5)
                                 end_time = time.time()*1000
-                                job_client.create(self.name, req_user, start_time, end_time, 5500, req_rewards)
+                                job_client.create(self.name, req_user, start_time, end_time, 5500, float(data_list[1]))
 
             except KeyboardInterrupt:
                 print('Client interrupted')

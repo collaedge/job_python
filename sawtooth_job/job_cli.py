@@ -321,7 +321,6 @@ def do_show(args):
 
 
 def do_create(args):
-    print(args)
     workerId = args.workerId
     publisherId = args.publisherId
     start_time = args.start_time
