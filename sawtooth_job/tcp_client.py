@@ -50,7 +50,7 @@ class TcpClient:
                                 job_name = data.split(',')[2]
                                 rewards = data.split(',')[3]
                                 if cpu_usage < 50.0 :
-                                    self.sock.send((self.name+',res,'+job_name + ',' + rewards).encode('utf-8'))
+                                    self.sock.send((self.name+',res,'+job_name + ',' + rewards+',').encode('utf-8'))
                             elif data_list[1] == 'res' and req_user == self.name:
                                 sys.stdout.write('req_user: '+req_user+' data: '+data+'\n')
                                 sys.stdout.flush()
@@ -61,7 +61,7 @@ class TcpClient:
                                     worker = job_client.chooseWorker2(workers)
                                     sys.stdout.write('worker: '+worker+'\n')
                                     sys.stdout.flush()
-                                    str_out = 'do,' + worker + ',' + data_list[2]
+                                    str_out = 'do,' + worker + ',' + data_list[2] + ',' + data_list[3]
                                     workers.clear()
                                     self.sock.send(str_out.encode('utf-8'))
                             elif data_list[1] == self.name and data_list[0] == 'do':
@@ -72,7 +72,7 @@ class TcpClient:
                                 start_time = time.time()*1000
                                 time.sleep(5)
                                 end_time = time.time()*1000
-                                job_client.create(self.name, req_user, start_time, end_time, 5500, float(data_list[1]))
+                                job_client.create(self.name, req_user, start_time, end_time, 5500, float(data_list[3]))
 
             except KeyboardInterrupt:
                 print('Client interrupted')
