@@ -22,7 +22,7 @@ class TcpClient:
     def run(self):
         req_user = ''
         workers = []
-        req_rewards = 0
+        req_rewards = ''
         while True:
             try:
                 readable,writeable,exception = select.select([0,self.sock],[],[])
