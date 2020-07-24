@@ -19,6 +19,7 @@ class TcpClient:
             sys.exit(1)
     def run(self):
         req_user = ''
+        workers = []
         while True:
             try:
                 readable,writeable,exception = select.select([0,self.sock],[],[])
@@ -29,7 +30,7 @@ class TcpClient:
                         # input format <msg_type,task_name,base_rewards>
                         tmp = sys.stdin.readline().strip()
                         if tmp:
-                            start_time = time.time()
+                            req_user = self.name
                             data = self.name + ',' + tmp
                             self.sock.send(data.encode('utf-8'))
                     else:
@@ -43,23 +44,23 @@ class TcpClient:
                                 sys.stdout.flush()
                                 self.sock.send((self.name+',res,yes').encode('utf-8'))
                             elif data_list[1] == 'res' and req_user == self.name:
-                                sys.stdout.write('received res from '+req_user+' data: '+data+'\n')
+                                sys.stdout.write('req_user'+req_user+' data: '+data+'\n')
                                 sys.stdout.flush()
-                                end_time = time.time()
                                 job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=self.name)
-                                response = data + ',' + start_time + ',' + end_time
                                 # choose workers
-                                s = job_client.chooseWorker2(response)
-                                sys.stdout.write(s+'\n')
-                                sys.stdout.flush()
-                                str_out = 'do,' + s
-                                self.sock.send(str_out.encode('utf-8'))
+                                workers.append(data.split(',')[0])
+                                if len(workers) == 3 or len(workers) == 6:
+                                    s = job_client.chooseWorker2(workers)
+                                    sys.stdout.write(s+'\n')
+                                    sys.stdout.flush()
+                                    str_out = 'do,' + s
+                                    self.sock.send(str_out.encode('utf-8'))
                             elif data_list[1] == self.name and data_list[0] == 'do':
                                 job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=self.name)
                                 start_time = time.time()
                                 time.sleep(5)
                                 end_time = time.time()
-                                job_client.create(self.name,req_user ,start_time, end_time, 5500, 20)
+                                job_client.create(self.name, req_user, start_time, end_time, 5500, 20)
 
             except KeyboardInterrupt:
                 print('Client interrupted')

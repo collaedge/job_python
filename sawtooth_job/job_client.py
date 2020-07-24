@@ -178,28 +178,25 @@ class JobClient:
         return self.chooseOne(workers_id, normalized_working_time, normalized_delay, normalized_repus)
 
     def chooseWorker2(self, data):
+        print('chooseWorker2: '+data)
         sys.stdout.write(data+'\n')
         sys.stdout.flush()
-        worker_delays = {}
-        workers_id = []
-        for v in data:
-            temp = v.split(',')
-            if temp[2] == 'yes':
-                workers_id.append(temp[0])
-                worker_delays.setdefault(temp[0], []).append({
-                    'delay': temp[4] - temp[3]
-                })
-        print('worker_delays ', worker_delays)
+        workers_id = data.split(',')
         # get reputation of workers
         repus = self.computeReputation(workers_id)
         print('++++ reputation +++++')
         print(repus)
-        
+
+
+        sorted_repu = sorted(repus.items(), key=lambda x: x[1],reverse = True)
+        print('++++ sorted_repu +++++')
+        print(repus)
+        return sorted_repu[0]
         # normalized_working_time = self.normalization(working_time)
-        normalized_delay = self.normalization(worker_delays)
-        normalized_repus = self.normalization(repus)
+        # normalized_delay = self.normalization(worker_delays)
+        # normalized_repus = self.normalization(repus)
      
-        return self.chooseOne(workers_id, normalized_delay, normalized_repus)
+        # return self.chooseOne(workers_id, normalized_delay, normalized_repus)
 
 
     def chooseOne(self, workers, delay, reputation):
@@ -213,7 +210,7 @@ class JobClient:
             - delay_weight*delay[workerId]
         print('++++ choose one combine +++++')
         print(combine)
-        s = sorted(combine.items(), key=lambda x: x[1],reverse = True)
+        s = c
 
         return s[0]
 
