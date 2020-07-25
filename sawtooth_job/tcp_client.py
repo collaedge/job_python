@@ -57,7 +57,7 @@ class TcpClient:
                                 job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=None)
                                 # choose workers
                                 workers.append(data.split(',')[0])
-                                if len(workers) >= 3:
+                                if len(workers) >= 2:
                                     worker = job_client.chooseWorker2(workers)
                                     sys.stdout.write('worker: '+worker+'\n')
                                     sys.stdout.flush()
