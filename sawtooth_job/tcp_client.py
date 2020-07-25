@@ -61,10 +61,11 @@ class TcpClient:
                                     worker = job_client.chooseWorker2(workers)
                                     sys.stdout.write('worker: '+worker+'\n')
                                     sys.stdout.flush()
-                                    str_out = 'do,' + worker + ',' + data_list[2] + ',' + data_list[3]
+                                    # do, worker name, job name, rewards
+                                    str_out = worker + ',do' + ',' + data_list[2] + ',' + data_list[3]
                                     workers.clear()
                                     self.sock.send(str_out.encode('utf-8'))
-                            elif data_list[1] == self.name and data_list[0] == 'do':
+                            elif data_list[1] == 'do' and data_list[0] == self.name :
                                 sys.stdout.write('do worker: '+self.name+'\n')
                                 sys.stdout.flush()
                                 keyfile = self.get_keyfile(self.name)
@@ -72,7 +73,9 @@ class TcpClient:
                                 start_time = time.time()*1000
                                 time.sleep(5)
                                 end_time = time.time()*1000
-                                job_client.create(self.name, req_user, start_time, end_time, 5500, float(data_list[3]))
+                                response = job_client.create(self.name, req_user, start_time, end_time, 5500, float(data_list[3]))
+                                sys.stdout.write("worker create job Response: {}".format(response))
+                                sys.stdout.flush()
 
             except KeyboardInterrupt:
                 print('Client interrupted')

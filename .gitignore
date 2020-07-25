@@ -9,3 +9,4 @@ dist/
 sawtooth_job.egg-info/
 
 build/
+.vscode/settings.json
