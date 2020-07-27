@@ -75,7 +75,8 @@ class TcpClient:
                                 recordcount = data_list[2].split('|')[1]
                                 start_time = time.time()*1000
                                 # time.sleep(5)
-                                subprocess.Popen(['~/development/ycsb-0.17.0/bin/ycsb.sh run basic -P workloads/workloada -p recordcount=%s' % recordcount], shell = True)
+                                p = subprocess.Popen(['~/development/ycsb-0.17.0/bin/ycsb.sh run basic -P ~/development/ycsb-0.17.0/workloads/workloada -p recordcount=%s' % recordcount], shell = True)
+                                p.wait()
                                 end_time = time.time()*1000
                                 response = job_client.create(self.name, req_user, start_time, end_time, float(data_list[4]), float(data_list[3]))
                                 sys.stdout.write("worker create job Response: {}".format(response))
