@@ -4,6 +4,7 @@ import sys
 import time
 import psutil
 import os
+import subprocess
 
 from sawtooth_job.job_client import JobClient
 
@@ -49,8 +50,9 @@ class TcpClient:
                                 sys.stdout.flush()
                                 job_name = data.split(',')[2]
                                 rewards = data.split(',')[3]
+                                deadline = data.split(',')[4]
                                 if cpu_usage < 50.0 :
-                                    self.sock.send((self.name+',res,'+job_name + ',' + rewards+',').encode('utf-8'))
+                                    self.sock.send((self.name+',res,'+job_name + ',' + rewards+',' + deadline +',').encode('utf-8'))
                             elif data_list[1] == 'res' and req_user == self.name:
                                 sys.stdout.write('req_user: '+req_user+' data: '+data+'\n')
                                 sys.stdout.flush()
@@ -62,7 +64,7 @@ class TcpClient:
                                     sys.stdout.write('worker: '+worker+'\n')
                                     sys.stdout.flush()
                                     # do, worker name, job name, rewards
-                                    str_out = worker + ',do' + ',' + data_list[2] + ',' + data_list[3]
+                                    str_out = worker + ',do' + ',' + data_list[2] + ',' + data_list[3] + ',' + data_list[4]
                                     workers.clear()
                                     self.sock.send(str_out.encode('utf-8'))
                             elif data_list[1] == 'do' and data_list[0] == self.name :
@@ -70,10 +72,12 @@ class TcpClient:
                                 sys.stdout.flush()
                                 keyfile = self.get_keyfile(self.name)
                                 job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=keyfile)
+                                recordcount = data_list[2].split('|')[1]
                                 start_time = time.time()*1000
-                                time.sleep(5)
+                                # time.sleep(5)
+                                subprocess.Popen(['~/development/ycsb-0.17.0/bin/ycsb.sh run basic -P workloads/workloada -p recordcount=%s' % recordcount], shell = True)
                                 end_time = time.time()*1000
-                                response = job_client.create(self.name, req_user, start_time, end_time, 5500, float(data_list[3]))
+                                response = job_client.create(self.name, req_user, start_time, end_time, float(data_list[4]), float(data_list[3]))
                                 sys.stdout.write("worker create job Response: {}".format(response))
                                 sys.stdout.flush()
 
