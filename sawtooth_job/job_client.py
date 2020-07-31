@@ -299,7 +299,7 @@ class JobClient:
             recvExtraRewards[job['workerId']] += job['extra_rewards']
 
         for workerId in workerIds:
-            info = str(recvBaseRewards[workerId]) + ' - ' + str(recvExtraRewards[workerId]) + ' - ' + str(reputation_workers[workerId])
+            info = workerId + ' - ' +str(recvBaseRewards[workerId]) + ' - ' + str(recvExtraRewards[workerId]) + ' - ' + str(reputation_workers[workerId])
             print('++++++++write log++++++++')
             print(info)
             logger.info(info)
