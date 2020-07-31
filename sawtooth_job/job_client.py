@@ -235,7 +235,7 @@ class JobClient:
         logger = logging.getLogger()
         hdlr = logging.FileHandler('/home/ubuntu/reputation.log')
         logger.addHandler(hdlr) 
-        logger.setLevel(logging.DEBUG)
+        logger.setLevel(logging.INFO)
 
         # get all job from chain
         job_list = [
