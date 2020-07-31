@@ -24,6 +24,7 @@ import requests
 import yaml
 import math
 import sys
+import logging
 
 from sawtooth_signing import create_context
 from sawtooth_signing import CryptoFactory
@@ -197,18 +198,18 @@ class JobClient:
         # return self.chooseOne(workers_id, normalized_delay, normalized_repus)
 
 
-    def chooseOne(self, workers, delay, reputation):
+    def chooseOne(self, workers, delay, reputation, working_time):
         delay_weight = 0.3
-        # working_time_weight = 0.3
+        working_time_weight = 0.3
         reputation_weight = 0.7
 
         combine = {}
         for workerId in workers:
             combine[workerId] = reputation_weight*reputation[workerId] 
-            - delay_weight*delay[workerId]
+            - delay_weight*delay[workerId] - working_time_weight*working_time[workerId]
         print('++++ choose one combine +++++')
         print(combine)
-        s = c
+        s = sorted(combine.items(), key=lambda x: x[1],reverse = True)
 
         return s[0]
 
@@ -228,7 +229,13 @@ class JobClient:
     def computeReputation(self, workerIds):
         # current time in millisecond
         # current_time = time.time()
-        current_time = 1594303200000
+        current_time = 1593871200000
+
+        logger = logging.getLogger()
+        hdlr = logging.FileHandler('reputation.log')
+        logger.addHandler(hdlr) 
+        logger.setLevel(logging.DEBUG)
+
         # get all job from chain
         job_list = [
             job.split(',')
@@ -241,6 +248,7 @@ class JobClient:
         #           end_time 
         #           extra_rewards 
         job_record = {}
+        jobs = []
         if job_list is not None:
             for job_data in job_list:
                 jobId, workerId, publisherId, start_time, end_time, deadline, base_rewards, extra_rewards = job_data
@@ -248,6 +256,12 @@ class JobClient:
                     'start_time': start_time,
                     'end_time': end_time,
                     'extra_rewards': extra_rewards
+                })
+                jobs.append({
+                    'workerId': workerId,
+                    'publisherId': publisherId,
+                    'base_rewards': float(base_rewards),
+                    'extra_rewards': float(extra_rewards)
                 })
         else:
             raise JobException("Could not retrieve game listing.")
@@ -272,6 +286,21 @@ class JobClient:
             if workerId in score_running_based and workerId in score_rewards_based:
                 reputation_workers[workerId] = (2*score_running_based[workerId]*score_rewards_based[workerId]) / (score_running_based[workerId]+score_rewards_based[workerId])
         
+        recvBaseRewards = {}
+        recvExtraRewards = {}
+        # initialize 
+        for job in jobs:
+            recvBaseRewards[job['workerId']] = 0
+            recvExtraRewards[job['workerId']] = 0
+
+        for job in jobs:
+            recvBaseRewards[job['workerId']] += job['base_rewards']
+            recvExtraRewards[job['workerId']] += job['extra_rewards']
+
+        for workerId in workerIds:
+            info = str(recvBaseRewards[workerId]) + ' - ' + str(recvExtraRewards[workerId]) + ' - ' + str(reputation_workers[workerId])
+            logger.info(info)
+            
         return reputation_workers
 
     def computeBasedOnRunningTime(self, current_time, workerIds, job_record):
