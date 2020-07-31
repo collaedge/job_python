@@ -231,8 +231,9 @@ class JobClient:
         # current_time = time.time()
         current_time = 1593871200000
 
+        print('++++++++create log file++++++++')
         logger = logging.getLogger()
-        hdlr = logging.FileHandler('reputation.log')
+        hdlr = logging.FileHandler('/home/ubuntu/reputation.log')
         logger.addHandler(hdlr) 
         logger.setLevel(logging.DEBUG)
 
@@ -299,8 +300,10 @@ class JobClient:
 
         for workerId in workerIds:
             info = str(recvBaseRewards[workerId]) + ' - ' + str(recvExtraRewards[workerId]) + ' - ' + str(reputation_workers[workerId])
+            print('++++++++write log++++++++')
+            print(info)
             logger.info(info)
-            
+
         return reputation_workers
 
     def computeBasedOnRunningTime(self, current_time, workerIds, job_record):
@@ -329,10 +332,10 @@ class JobClient:
                 # workers' start time of the first job
                 worker_start[workerId] = float(sorted(records, key=lambda x: float(x['start_time']))[0]['start_time'])
 
-        print('++++ worker start time +++++')
-        print(worker_start)
-        print('++++ worker number of jobs +++++')
-        print(job_num_worker)
+        # print('++++ worker start time +++++')
+        # print(worker_start)
+        # print('++++ worker number of jobs +++++')
+        # print(job_num_worker)
         # compute score based on history jobs and running time
         running_score = {}
         averge_job = {}
@@ -345,17 +348,17 @@ class JobClient:
                 averge_job[workerId] = v / (2 * (job_num_all/4))
             else:
                 averge_job[workerId] = 0
-        print('++++ running_time +++++')
-        print(running_time)
-        print('++++ averge_job +++++')
-        print(averge_job)
+        # print('++++ running_time +++++')
+        # print(running_time)
+        # print('++++ averge_job +++++')
+        # print(averge_job)
 
         for workerId, v in running_time.items():
             if workerId in averge_job:
                 running_score[workerId] = A*v + (1-A)*averge_job[workerId]
 
-        print('++++ running_score +++++')
-        print(running_score)
+        # print('++++ running_score +++++')
+        # print(running_score)
 
         return running_score
 
