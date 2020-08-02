@@ -17,12 +17,14 @@ class CPU:
         logger.addHandler(hdlr) 
         logger.setLevel(logging.DEBUG)
         while 1:
-            p = psutil.Process(self.pid)
-            cpu_usage = psutil.cpu_percent(interval=2)
+            p = psutil.Process(int(self.pid))
+            cpu_usage = p.cpu_percent(interval=2)
             t = time.time()
             info = str(t) + '-' + str(cpu_usage)
             logger.info(info)
 
 if __name__ == "__main__":
-    cpu=CPU(sys.argv[1])
+    pid = sys.argv[1]
+    print(pid)
+    cpu=CPU(pid)
     cpu.run()
