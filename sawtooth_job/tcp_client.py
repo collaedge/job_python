@@ -31,7 +31,10 @@ class TcpClient:
                     end_time = 0
                     if sock == 0:
                         # input format <msg_type,task_name,base_rewards>
-                        tmp = sys.stdin.readline().strip()
+                        self.workload(1000, 20)
+                        wl = 1000
+                        r = 10
+                        tmp = 'req,j|'+ str(wl) + '|' + str(r) +',20,2000' #sys.stdin.readline().strip()
                         if tmp:
                             req_user = self.name
                             data = self.name + ',' + tmp
@@ -73,10 +76,13 @@ class TcpClient:
                                 keyfile = self.get_keyfile(self.name)
                                 job_client = JobClient(base_url='http://127.0.0.1:8008', keyfile=keyfile)
                                 recordcount = data_list[2].split('|')[1]
+                                # loop times
+                                j_round = data_list[2].split('|')[2]
                                 start_time = time.time()*1000
                                 # time.sleep(5)
-                                p = subprocess.Popen(['~/development/ycsb-0.17.0/bin/ycsb.sh run basic -P ~/development/ycsb-0.17.0/workloads/workloada -p operationcount=%s' % recordcount], shell = True)
-                                p.wait()
+                                # p = subprocess.Popen(['~/development/ycsb-0.17.0/bin/ycsb.sh run basic -P ~/development/ycsb-0.17.0/workloads/workloada -p operationcount=%s' % recordcount], shell = True)
+                                self.workload(int(recordcount), int(j_round))
+
                                 end_time = time.time()*1000
                                 response = job_client.create(self.name, req_user, start_time, end_time, float(data_list[4]), float(data_list[3]))
                                 sys.stdout.write("worker create job Response: {}".format(response))
@@ -91,6 +97,13 @@ class TcpClient:
         home = os.path.expanduser("~")
         key_dir = os.path.join(home, ".sawtooth", "keys")
         return '{}/{}.priv'.format(key_dir, username)
+
+    def workload(self, count, round):
+        count = 0
+        while count < round:
+            p = subprocess.Popen(['~/development/ycsb-0.17.0/bin/ycsb.sh run basic -P ~/development/ycsb-0.17.0/workloads/workloada -p operationcount=%s' % count], shell = True)
+            p.wait()
+            count = count + 1
 # if __name__ == "__main__":
 #     name = input("Please input login name > ")
 #     client=client(name)
