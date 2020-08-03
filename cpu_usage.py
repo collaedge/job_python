@@ -18,7 +18,7 @@ class CPU:
         logger.setLevel(logging.DEBUG)
         while 1:
             p = psutil.Process(int(self.pid))
-            cpu_usage = p.cpu_percent(interval=2)
+            cpu_usage = p.cpu_percent(interval=1)
             t = time.time()
             info = str(t) + '-' + str(cpu_usage)
             logger.info(info)
