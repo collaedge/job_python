@@ -31,16 +31,11 @@ class TcpClient:
                     end_time = 0
                     if sock == 0:
                         # input format <msg_type,task_name,base_rewards>
-                        while 1:
-                            self.workload(1000, 20)
-                            wl = 1000
-                            r = 10
-                            tmp = 'req,j|'+ str(wl) + '|' + str(r) +',20,2000' #sys.stdin.readline().strip()
-                            if tmp:
-                                req_user = self.name
-                                data = self.name + ',' + tmp
-                                self.sock.send(data.encode('utf-8'))
-                            time.sleep(3)
+                        tmp = sys.stdin.readline().strip()
+                        if tmp:
+                            req_user = self.name
+                            data = self.name + ',' + tmp
+                            self.sock.send(data.encode('utf-8'))
                     else:
                         data = sock.recv(1024).decode('utf-8')
                         if data:
